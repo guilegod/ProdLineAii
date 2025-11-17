@@ -1,0 +1,48 @@
+.producao-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.producao-box input,
+.producao-box select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #27496D;
+  background: #0D1E2C;
+  color: white;
+}
+
+.producao-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.producao-form input,
+.producao-form select,
+.producao-form textarea {
+  background: #0D1E2C;
+  border: 1px solid #27496D;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+}
+
+.pecas-lista {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.peca-item {
+  background: rgba(16,32,48,0.85);
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(95,168,211,0.18);
+  display: flex;
+  justify-content: space-between;
+}

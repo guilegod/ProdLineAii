@@ -1,0 +1,332 @@
+/* =============================== */
+/* LAYOUT GERAL                    */
+/* =============================== */
+
+.detalhes-layout {
+  display: flex;
+}
+
+.detalhes-content {
+  width: 100%;
+  margin-left: 240px;
+  padding: 24px;
+}
+
+@media (max-width: 899px) {
+  .detalhes-content {
+    margin-left: 0;
+    padding: 16px;
+  }
+}
+
+/* =============================== */
+/* PAINEL CABEÇALHO                */
+/* =============================== */
+
+.details-title-panel {
+  background: rgba(16, 32, 48, 0.95);
+  padding: 18px 22px;
+  border-radius: 16px;
+  border: 1px solid rgba(95,168,211,0.18);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.details-title-panel h1 {
+  color: #7bc6ff;
+  margin: 0;
+}
+
+/* Ações (botões) */
+.details-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-secundario {
+  background: #1B2F45;
+  border: 1px solid #27496D;
+  padding: 8px 12px;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-secundario:hover {
+  background: #2d5f85;
+}
+
+/* =============================== */
+/* PAINEL SENHA                    */
+/* =============================== */
+
+.senha-panel {
+  background: rgba(16,32,48,0.9);
+  padding: 14px 16px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(95,168,211,0.18);
+}
+
+.senha-panel input {
+  background: #0D1E2C;
+  border: 1px solid #27496D;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: #DCEAF7;
+}
+
+/* =============================== */
+/* GRID GERAL                      */
+/* =============================== */
+
+.detalhes-duas-colunas {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .detalhes-duas-colunas {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =============================== */
+/* PAINÉIS                         */
+/* =============================== */
+
+.details-panel {
+  background: rgba(16, 32, 48, 0.95);
+  padding: 18px 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(95,168,211,0.18);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+}
+
+.details-panel h2 {
+  color: #7bc6ff;
+  margin-bottom: 12px;
+}
+
+/* =============================== */
+/* GRID DOS CAMPOS                 */
+/* =============================== */
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px,1fr));
+  gap: 12px;
+}
+
+.details-grid label {
+  color: #A8C1D9;
+  font-size: 0.85rem;
+}
+
+.details-grid input,
+.details-grid select,
+.details-grid textarea {
+  width: 100%;
+  background: #0D1E2C;
+  border: 1px solid #27496D;
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: #DCEAF7;
+}
+
+/* =============================== */
+/* QR CODE                         */
+/* =============================== */
+
+.qr-box {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* =============================== */
+/* FOTOS                           */
+/* =============================== */
+
+.photos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.photo-thumb-rect {
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #1E90FF;
+}
+
+.foto-wrapper {
+  position: relative;
+}
+
+.foto-remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 4px 7px;
+  background: #ff4d4d;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+/* =============================== */
+/* ARQUIVOS                        */
+/* =============================== */
+
+.files-list {
+  list-style: none;
+  padding: 0;
+}
+
+.files-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.file-icon {
+  font-size: 1.3rem;
+}
+
+.sem-arquivos {
+  opacity: .8;
+  margin-top: 4px;
+}
+
+/* =============================== */
+/* MODAL FOTO                      */
+/* =============================== */
+
+.modal-foto-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 300;
+}
+
+.modal-foto-img {
+  width: 90%;
+  max-width: 550px;
+  border-radius: 16px;
+}
+
+/* =============================== */
+/* MODAL QR                        */
+/* =============================== */
+
+.modal-qr-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 300;
+}
+
+.modal-qr-content {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-qr-rastro {
+  margin-top: 12px;
+  font-size: 1.4rem;
+  color: black;
+}
+
+/* =============================== */
+/* BOTÃO SALVAR                    */
+/* =============================== */
+
+.save-btn {
+  margin-top: 12px;
+  background: #1E90FF;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+/* ========================================= */
+/* MODO DE IMPRESSÃO – DOCUMENTO LIMPO       */
+/* ========================================= */
+@media print {
+
+  /* Remove sidebar, botões, overlays */
+  .sidebar,
+  .hamburger-btn,
+  .details-actions,
+  .senha-panel,
+  .modal-foto-backdrop,
+  .modal-qr-backdrop,
+  .sidebar-overlay {
+    display: none !important;
+  }
+
+  /* Página ocupa toda a folha */
+  body,
+  .detalhes-layout,
+  .detalhes-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+  }
+
+  /* Remove fundos escuros para não gastar tinta */
+  .details-panel,
+  .details-title-panel {
+    background: white !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+
+  /* Esconde fotos e arquivos */
+  .photos-grid,
+  .files-list {
+    display: none !important;
+  }
+
+  /* QR grande */
+  .qr-box canvas {
+    width: 260px !important;
+    height: 260px !important;
+  }
+
+  /* Títulos pretos */
+  h1, h2, h3, p, label {
+    color: black !important;
+  }
+}
+/* melhora a qualidade da captura */
+.detalhes-content {
+  background: #696969;
+}

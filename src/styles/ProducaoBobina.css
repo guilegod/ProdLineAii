@@ -1,0 +1,22 @@
+.producao-lista {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.producao-lista li {
+  background: rgba(16, 32, 48, 0.95);
+  border: 1px solid rgba(95, 168, 211, 0.18);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+}
+
+.producao-lista li div {
+  color: #DCEAF7;
+  font-size: 0.9rem;
+}

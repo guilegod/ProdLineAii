@@ -1,0 +1,108 @@
+/* ================================================
+   RESET
+   ================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #071521;
+  color: #E3ECF5;
+  overflow-x: hidden;
+}
+
+/* ================================================
+   LAYOUT PADRÃO (SIDEBAR + CONTEÚDO)
+   ================================================ */
+
+.layout {
+  display: flex;
+}
+
+/* Sidebar fixa */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background: #0c1a27;
+  border-right: 1px solid rgba(255,255,255,0.05);
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 999;
+}
+
+/* Área do conteúdo principal */
+.page-content {
+  margin-left: 240px;          /* evita ficar atrás da sidebar */
+  padding: 25px 40px;
+  width: calc(100% - 240px);
+  min-height: 100vh;
+}
+.page-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+  padding: 30px;
+  padding-left: 280px; /* espaço para lateral */
+}
+/* GLOBAL GERAL */
+
+body {
+  background: #071521;
+  color: #E3ECF5;
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+}
+
+/* Layout padrão para páginas com sidebar */
+.page-layout {
+  display: flex;
+}
+
+/* Conteúdo principal com espaço para sidebar */
+.content {
+  margin-left: 240px;
+  padding: 24px;
+  width: calc(100% - 240px);
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .content {
+    margin-left: 0;
+    width: 100%;
+    padding: 16px;
+  }
+}
+/* ====== RESET CORRIGIDO ====== */
+body, html {
+  margin: 0;
+  padding: 0;
+  background: #071521;
+  color: #E3ECF5;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Links padrão */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Mantém o conteúdo fora da sidebar (desktop) */
+@media (min-width: 900px) {
+  .content, .detalhes-content {
+    margin-left: 260px !important;
+  }
+}

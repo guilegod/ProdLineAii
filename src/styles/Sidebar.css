@@ -1,0 +1,152 @@
+/* =============================== */
+/*   SIDEBAR – ESTILO GERAL       */
+/* =============================== */
+
+.sidebar {
+  width: 240px;
+  background: #0b1a27;
+  color: #dceaf7;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 20px 16px;
+  box-shadow: 3px 0 12px rgba(0, 0, 0, 0.4);
+  z-index: 200;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Desktops – sidebar sempre aberta */
+@media (min-width: 900px) {
+  .sidebar {
+    transform: translateX(0);
+  }
+}
+
+/* Mobile – sidebar fechada por padrão */
+@media (max-width: 899px) {
+  .sidebar {
+    transform: translateX(-260px);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* =============================== */
+/* SIDEBAR HEADER                  */
+/* =============================== */
+
+.sidebar-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-header h2 {
+  color: #7bc6ff;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+}
+
+/* =============================== */
+/* LINKS DO MENU                   */
+/* =============================== */
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar-links a {
+  display: block;
+  padding: 10px 14px;
+  color: #dceaf7;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: 0.2s;
+  font-size: 1rem;
+}
+
+.sidebar-links a:hover {
+  background: #123047;
+}
+
+.sidebar-links a:active {
+  transform: scale(0.97);
+}
+
+/* =============================== */
+/* BOTÃO HAMBÚRGUER (MOBILE)       */
+/* =============================== */
+
+.hamburger-btn {
+  position: fixed;
+  top: 14px;
+  left: 12px;
+  background: #102030;
+  border: none;
+  color: #dceaf7;
+  font-size: 1.6rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 250;
+  display: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Mostra o botão somente no mobile */
+@media (max-width: 899px) {
+  .hamburger-btn {
+    display: block;
+  }
+}
+
+/* =============================== */
+/* OVERLAY – FUNDO ESCURO          */
+/* =============================== */
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 180;
+  display: none;
+}
+
+.sidebar-overlay.show {
+  display: block;
+}
+
+/* Desktop: overlay NUNCA aparece */
+@media (min-width: 900px) {
+  .sidebar-overlay {
+    display: none !important;
+  }
+}
+
+/* =============================== */
+/* AJUSTE DO CONTEÚDO PRINCIPAL    */
+/* =============================== */
+
+.page-layout,
+.detalhes-layout {
+  display: flex;
+}
+
+/* Ajusta afastamento quando sidebar existe */
+.content,
+.detalhes-content {
+  width: 100%;
+  margin-left: 240px; /* igual à largura do menu */
+  padding: 20px;
+}
+
+@media (max-width: 899px) {
+  .content,
+  .detalhes-content {
+    margin-left: 0;   /* no mobile o menu é sobreposto */
+    padding: 16px;
+  }
+}

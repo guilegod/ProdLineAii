@@ -1,0 +1,169 @@
+/* ===== PAINEL PRINCIPAL ===== */
+.qualidade-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ===== TÍTULO PRINCIPAL ===== */
+.qualidade-title {
+  font-size: 2.2rem;
+  color: #8fd4ff;
+  text-shadow: 0 0 12px rgba(100, 180, 255, 0.4);
+  margin-bottom: 6px;
+}
+
+/* ===== NAV TABS (Análise / Peças) ===== */
+.qualidade-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.qtab {
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  background: linear-gradient(135deg, #1b2e47, #233a5c);
+  color: #d7e8f7;
+  border: 1px solid rgba(120, 160, 210, 0.15);
+  transition: 0.25s;
+}
+
+.qtab:hover {
+  background: linear-gradient(135deg, #24476b, #2f5780);
+  color: #ffffff;
+}
+
+.qtab.active {
+  background: linear-gradient(135deg, #0b87ff, #0066d8);
+  color: white;
+  box-shadow: 0 3px 10px rgba(0, 130, 255, 0.45);
+}
+
+/* ===== GRID DOS CARDS ===== */
+.qualidade-grid {
+  display: grid;
+  gap: 26px;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+}
+
+/* ===== CARD ===== */
+.qualidade-card {
+  background: rgba(10, 22, 35, 0.92);
+  border: 1px solid rgba(120, 160, 210, 0.2);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45),
+              inset 0 0 20px rgba(80, 120, 160, 0.08);
+  transition: 0.2s ease-in-out;
+}
+
+.qualidade-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.55),
+              inset 0 0 25px rgba(80, 140, 220, 0.12);
+}
+
+/* ===== TÍTULO DO CARD (RASTRO) ===== */
+.qualidade-card h2 {
+  color: #7cc9ff;
+  margin-bottom: 6px;
+  font-size: 1.35rem;
+  text-shadow: 0 0 8px rgba(100, 180, 255, 0.4);
+}
+
+/* ===== STATUS ===== */
+.status-line {
+  margin-bottom: 14px;
+  font-size: 1rem;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-left: 6px;
+  font-size: 0.85rem;
+}
+
+.status-bloqueada {
+  background: rgba(255, 50, 50, 0.15);
+  border: 1px solid rgba(255, 80, 80, 0.45);
+  color: #ff6b6b;
+}
+
+.status-liberada {
+  background: rgba(0, 220, 130, 0.15);
+  border: 1px solid rgba(0, 220, 130, 0.45);
+  color: #00e17a;
+}
+
+.status-aguardando {
+  background: rgba(255, 210, 40, 0.15);
+  border: 1px solid rgba(255, 210, 40, 0.45);
+  color: #ffd43b;
+}
+
+/* ===== BOTÕES ===== */
+.card-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.btn-q {
+  padding: 14px;
+  text-align: center;
+  font-size: 1rem;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+  color: white;
+  border: none;
+}
+
+/* Verde */
+.btn-liberar {
+  background: linear-gradient(135deg, #15d97c, #0fb86a);
+  box-shadow: 0 4px 12px rgba(0, 180, 90, 0.4);
+}
+.btn-liberar:hover {
+  background: linear-gradient(135deg, #1eef8e, #14cc7b);
+}
+
+/* Vermelho */
+.btn-bloquear {
+  background: linear-gradient(135deg, #ff4747, #d63c3c);
+  box-shadow: 0 4px 12px rgba(255, 70, 70, 0.4);
+}
+.btn-bloquear:hover {
+  background: linear-gradient(135deg, #ff5a5a, #e24949);
+}
+
+/* Anexar laudo */
+.btn-laudo {
+  background: linear-gradient(135deg, #304e71, #3a5e8b);
+  position: relative;
+}
+.btn-laudo:hover {
+  background: linear-gradient(135deg, #3a5e8b, #4671a8);
+}
+
+.btn-laudo input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Detalhes */
+.btn-detalhes {
+  background: linear-gradient(135deg, #1578ff, #0e5ad1);
+}
+.btn-detalhes:hover {
+  background: linear-gradient(135deg, #1b8cff, #1472dd);
+}
