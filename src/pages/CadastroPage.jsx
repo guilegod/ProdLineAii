@@ -5,7 +5,7 @@ import Sidebar from "../components/Sidebar.jsx";
 import { loadLocal, saveLocal, createBobina } from "../services/bobinasService.js";
 import "../styles/CadastroStyles.css";
 
-// Turno automático
+// turnos automáticos
 function calcularTurno() {
   const hora = new Date().getHours();
   if (hora >= 6 && hora < 14) return "1º Turno";
@@ -38,9 +38,9 @@ export default function CadastroPage() {
     rastro || ""
   )}`;
 
-  // ==========================================
-  // SALVAR
-  // ==========================================
+  // ============================================================
+  // SALVAR BOBINA
+  // ============================================================
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -67,38 +67,40 @@ export default function CadastroPage() {
       observacoes,
       fotos: [],
       producao: [],
+      arquivos: [],
       historicoQualidade: [],
     };
 
     try {
-      // ⬅ ENVIA PARA O BACKEND AGORA!
+      // SALVA NO BACKEND
       const salvo = await createBobina(novaBobina);
 
-      // sincroniza localStorage
-      const atual = loadLocal();
+      // sincroniza localStorage com o retorno da API
+      const atual = loadLocal().filter((b) => b.rastro !== salvo.rastro);
       saveLocal([...atual, salvo]);
 
-      setMensagem(`Bobina ${rastro} salva no servidor!`);
+      setMensagem(`Bobina ${rastro} salva com sucesso!`);
       setMostrarQR(true);
 
     } catch (err) {
-      console.error("Erro ao salvar na API:", err);
+      console.warn("Erro API, salvando local:", err);
 
-      // fallback local
-      const atual = loadLocal();
+      // fallback LOCAL
+      const atual = loadLocal().filter((b) => b.rastro !== novaBobina.rastro);
       saveLocal([...atual, novaBobina]);
 
-      setMensagem(`⚠ API offline — Bobina salva somente localmente.`);
+      setMensagem("⚠ API offline — Bobina salva somente localmente.");
       setMostrarQR(true);
     }
   }
 
-  // ==========================================
+  // ============================================================
   // IMPRIMIR QR
-  // ==========================================
+  // ============================================================
   function imprimirQR() {
     const canvas = document.querySelector(".qr-pos-cadastro canvas");
     if (!canvas) return;
+
     const img = canvas.toDataURL("image/png");
     const win = window.open("", "_blank");
     win.document.write(`<img src="${img}" style="width:280px">`);
@@ -106,15 +108,14 @@ export default function CadastroPage() {
     win.close();
   }
 
-  // ==========================================
+  // ============================================================
   // LAYOUT
-  // ==========================================
+  // ============================================================
   return (
     <div className="page-layout">
       <Sidebar />
 
       <main className="content cadastro-page">
-
         {/* CABEÇALHO */}
         <section className="cadastro-header-card">
           <h1>Cadastro de Bobina</h1>
@@ -124,12 +125,11 @@ export default function CadastroPage() {
           </p>
         </section>
 
-        {/* FORM */}
+        {/* FORMULÁRIO */}
         <section className="cadastro-form-card">
           <h2>Dados da Bobina</h2>
 
           <form className="cadastro-form" onSubmit={handleSubmit}>
-
             {/* RASTRO */}
             <div className="form-row">
               <label>
@@ -148,11 +148,8 @@ export default function CadastroPage() {
 
             {/* LINHA / TURNO / ORIGEM / DATA */}
             <div className="form-row-inline">
-
               <div className="form-row">
-                <label>
-                  <span className="field-icon">🏭</span> Linha
-                </label>
+                <label>🏭 Linha</label>
                 <select value={linha} onChange={(e) => setLinha(e.target.value)}>
                   <option value="L1">Linha 01</option>
                   <option value="L2">Linha 02</option>
@@ -160,9 +157,7 @@ export default function CadastroPage() {
               </div>
 
               <div className="form-row">
-                <label>
-                  <span className="field-icon">⏱</span> Turno
-                </label>
+                <label>⏱ Turno</label>
                 <select value={turno} onChange={(e) => setTurno(e.target.value)}>
                   <option>1º Turno</option>
                   <option>2º Turno</option>
@@ -171,9 +166,7 @@ export default function CadastroPage() {
               </div>
 
               <div className="form-row">
-                <label>
-                  <span className="field-icon">🌍</span> Origem
-                </label>
+                <label>🌍 Origem</label>
                 <select value={origem} onChange={(e) => setOrigem(e.target.value)}>
                   <option value="Bundy">Bundy</option>
                   <option value="Concorrente">Concorrente</option>
@@ -181,23 +174,18 @@ export default function CadastroPage() {
               </div>
 
               <div className="form-row">
-                <label>
-                  <span className="field-icon">📅</span> Data
-                </label>
+                <label>📅 Data</label>
                 <input
                   type="date"
                   value={data}
                   onChange={(e) => setData(e.target.value)}
                 />
               </div>
-
             </div>
 
             {/* OPERADOR / MATRÍCULA */}
             <div className="form-row">
-              <label>
-                <span className="field-icon">👷</span> Operador
-              </label>
+              <label>👷 Operador</label>
               <input
                 value={operador}
                 onChange={(e) => setOperador(e.target.value)}
@@ -206,9 +194,7 @@ export default function CadastroPage() {
             </div>
 
             <div className="form-row">
-              <label>
-                <span className="field-icon">🪪</span> Matrícula
-              </label>
+              <label>🪪 Matrícula</label>
               <input
                 value={matricula}
                 onChange={(e) => setMatricula(e.target.value)}
@@ -218,9 +204,7 @@ export default function CadastroPage() {
 
             {/* DADOS TÉCNICOS */}
             <div className="form-row">
-              <label>
-                <span className="field-icon">⚙️</span> Tipo
-              </label>
+              <label>⚙️ Tipo</label>
               <select value={tipo} onChange={(e) => setTipo(e.target.value)}>
                 <option value="">Selecione...</option>
                 <option value="PEWQ">PEWQ</option>
@@ -229,12 +213,12 @@ export default function CadastroPage() {
             </div>
 
             <div className="form-row-inline">
-
               <div className="form-row">
-                <label>
-                  <span className="field-icon">📏</span> Diâmetro
-                </label>
-                <select value={diametro} onChange={(e) => setDiametro(e.target.value)}>
+                <label>📏 Diâmetro</label>
+                <select
+                  value={diametro}
+                  onChange={(e) => setDiametro(e.target.value)}
+                >
                   <option value="">Selecione...</option>
                   <option value="4.00">4.00</option>
                   <option value="4.76">4.76</option>
@@ -244,9 +228,7 @@ export default function CadastroPage() {
               </div>
 
               <div className="form-row">
-                <label>
-                  <span className="field-icon">🧩</span> Furos
-                </label>
+                <label>🧩 Furos</label>
                 <input
                   type="number"
                   value={furos}
@@ -254,15 +236,11 @@ export default function CadastroPage() {
                   placeholder="0"
                 />
               </div>
-
             </div>
 
             <div className="form-row-inline">
-
               <div className="form-row">
-                <label>
-                  <span className="field-icon">📐</span> Comprimento (m)
-                </label>
+                <label>📐 Comprimento (m)</label>
                 <input
                   value={comprimento}
                   onChange={(e) => setComprimento(e.target.value)}
@@ -271,9 +249,7 @@ export default function CadastroPage() {
               </div>
 
               <div className="form-row">
-                <label>
-                  <span className="field-icon">⚖️</span> Peso (kg)
-                </label>
+                <label>⚖️ Peso (kg)</label>
                 <input
                   type="number"
                   value={peso}
@@ -281,14 +257,11 @@ export default function CadastroPage() {
                   placeholder="Ex: 1231"
                 />
               </div>
-
             </div>
 
             {/* STATUS */}
             <div className="form-row">
-              <label>
-                <span className="field-icon">✅</span> Status inicial
-              </label>
+              <label>✅ Status inicial</label>
               <input value={status} readOnly disabled />
               <small className="hint">
                 Toda bobina cadastrada entra como <b>Aguardando Laudo</b>.
@@ -297,9 +270,7 @@ export default function CadastroPage() {
 
             {/* OBSERVAÇÕES */}
             <div className="form-row">
-              <label>
-                <span className="field-icon">📝</span> Observações
-              </label>
+              <label>📝 Observações</label>
               <textarea
                 value={observacoes}
                 onChange={(e) => setObservacoes(e.target.value)}
@@ -314,7 +285,6 @@ export default function CadastroPage() {
               </button>
               {mensagem && <span className="msg-sucesso">{mensagem}</span>}
             </div>
-
           </form>
         </section>
 
@@ -333,7 +303,6 @@ export default function CadastroPage() {
             </button>
           </section>
         )}
-
       </main>
     </div>
   );
