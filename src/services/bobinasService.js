@@ -2,15 +2,16 @@
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-// chave do localStorage
+// Chave do localStorage
 const LS_KEY = "bobinas";
 
-// =============== LOCALSTORAGE (BACKUP) ===============
+// ========================================================
+// 🔵 LOCALSTORAGE (FALLBACK / BACKUP)
+// ========================================================
 export function loadLocal() {
   try {
     const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return [];
-    return JSON.parse(raw);
+    return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
   }
@@ -19,53 +20,74 @@ export function loadLocal() {
 export function saveLocal(lista) {
   try {
     localStorage.setItem(LS_KEY, JSON.stringify(lista));
-  } catch (e) {
-    console.warn("Erro ao salvar localStorage", e);
+  } catch (err) {
+    console.warn("Erro ao salvar localStorage:", err);
   }
 }
 
-// =============== API PRINCIPAL ===============
+// ========================================================
+// 🔵 API → LISTAGEM COMPLETA
+// ========================================================
 export async function fetchBobinas() {
   try {
     const res = await fetch(`${API_URL}/bobinas`);
     if (!res.ok) throw new Error("Erro ao buscar bobinas");
 
     const data = await res.json();
-
-    saveLocal(data); // sincroniza backup
+    saveLocal(data);
     return data;
-  } catch (e) {
-    console.warn("⚠ API offline, usando localStorage");
+
+  } catch (err) {
+    console.warn("⚠ API offline → usando localStorage");
     return loadLocal();
   }
 }
 
-// resumo (para estoque)
+// ========================================================
+// 🔵 API → RESUMO (estoque)
+// ========================================================
 export async function fetchResumo() {
   try {
     const res = await fetch(`${API_URL}/bobinas/resumo`);
     if (!res.ok) throw new Error();
+
     return await res.json();
+
   } catch {
-    console.warn("Resumo não disponível na API");
+    console.warn("⚠ Resumo indisponível na API");
     return null;
   }
 }
 
-// detalhes da bobina
+// ========================================================
+// 🔵 API → DETALHES
+// ========================================================
 export async function fetchBobinaDetalhe(rastro) {
   try {
     const res = await fetch(`${API_URL}/bobinas/${encodeURIComponent(rastro)}`);
-    if (!res.ok) throw new Error("Não encontrada");
-    return await res.json();
-  } catch (e) {
-    console.warn("⚠ API offline, usando backup local", e);
-    const todas = loadLocal();
-    return todas.find((b) => b.rastro === rastro) || null;
+
+    if (!res.ok) throw new Error("Bobina não encontrada na API");
+
+    const data = await res.json();
+
+    // sincroniza fallback local
+    const todas = loadLocal().filter((b) => b.rastro !== rastro);
+    saveLocal([...todas, data]);
+
+    return data;
+
+  } catch (err) {
+    console.warn("⚠ API offline → fallback local:", err);
+
+    return (
+      loadLocal().find((b) => b.rastro === rastro) || null
+    );
   }
 }
 
-// criar bobina
+// ========================================================
+// 🔵 API → CRIAR NOVA BOBINA
+// ========================================================
 export async function createBobina(bobina) {
   try {
     const res = await fetch(`${API_URL}/bobinas`, {
@@ -74,26 +96,29 @@ export async function createBobina(bobina) {
       body: JSON.stringify(bobina),
     });
 
-    if (!res.ok) throw new Error("Erro ao salvar na API");
+    if (!res.ok) throw new Error("Erro ao salvar no backend");
 
     const saved = await res.json();
 
-    // sincroniza local
-    const atuais = loadLocal().filter((b) => b.rastro !== saved.rastro);
-    saveLocal([...atuais, saved]);
+    saveLocal([...loadLocal().filter((b) => b.rastro !== saved.rastro), saved]);
 
     return saved;
-  } catch (e) {
-    console.warn("⚠ API offline → salvando apenas local", e);
 
-    const atuais = loadLocal().filter((b) => b.rastro !== bobina.rastro);
-    saveLocal([...atuais, bobina]);
+  } catch (err) {
+    console.warn("⚠ API offline → salvando local:", err);
+
+    saveLocal([
+      ...loadLocal().filter((b) => b.rastro !== bobina.rastro),
+      bobina,
+    ]);
 
     return bobina;
   }
 }
 
-// atualizar bobina inteira
+// ========================================================
+// 🔵 API → ATUALIZAR BOBINA INTEIRA
+// ========================================================
 export async function updateBobina(rastro, dados) {
   try {
     const res = await fetch(`${API_URL}/bobinas/${encodeURIComponent(rastro)}`, {
@@ -102,27 +127,33 @@ export async function updateBobina(rastro, dados) {
       body: JSON.stringify(dados),
     });
 
-    if (!res.ok) throw new Error("Erro ao atualizar na API");
+    if (!res.ok) throw new Error("Erro ao atualizar no backend");
 
     const atualizado = await res.json();
 
-    const atuais = loadLocal().filter((b) => b.rastro !== rastro);
-    saveLocal([...atuais, atualizado]);
+    saveLocal([
+      ...loadLocal().filter((b) => b.rastro !== rastro),
+      atualizado,
+    ]);
 
     return atualizado;
-  } catch (e) {
-    console.warn("⚠ API offline → update local apenas");
 
-    const atuais = loadLocal().map((b) =>
+  } catch (err) {
+    console.warn("⚠ API offline → update local:", err);
+
+    const atualizados = loadLocal().map((b) =>
       b.rastro === rastro ? { ...b, ...dados } : b
     );
 
-    saveLocal(atuais);
+    saveLocal(atualizados);
+
     return { ...dados, rastro };
   }
 }
 
-// atualizar apenas status
+// ========================================================
+// 🔵 API → ATUALIZAR STATUS
+// ========================================================
 export async function updateStatus(rastro, status) {
   try {
     const res = await fetch(
@@ -134,28 +165,33 @@ export async function updateStatus(rastro, status) {
       }
     );
 
-    if (!res.ok) throw new Error();
+    if (!res.ok) throw new Error("Erro no PATCH");
 
     const atualizado = await res.json();
 
-    const atuais = loadLocal().map((b) =>
+    const todas = loadLocal().map((b) =>
       b.rastro === rastro ? { ...b, status: atualizado.status } : b
     );
 
-    saveLocal(atuais);
+    saveLocal(todas);
     return atualizado;
+
   } catch {
-    console.warn("⚠ PATCH status offline → local");
-    const atuais = loadLocal().map((b) =>
+    console.warn("⚠ updateStatus offline → local");
+
+    const todas = loadLocal().map((b) =>
       b.rastro === rastro ? { ...b, status } : b
     );
-    saveLocal(atuais);
+
+    saveLocal(todas);
 
     return { rastro, status };
   }
 }
 
-// =============== FOTOS ===============
+// ========================================================
+// 🔵 API → FOTOS
+// ========================================================
 export async function addFoto(rastro, base64) {
   try {
     const res = await fetch(`${API_URL}/bobinas/${rastro}/fotos`, {
@@ -163,19 +199,23 @@ export async function addFoto(rastro, base64) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ base64 }),
     });
+
     if (!res.ok) throw new Error();
+
     return await res.json();
-  } catch {
-    console.warn("⚠ addFoto offline → local");
+
+  } catch (err) {
+    console.warn("⚠ addFoto offline → fallback local");
 
     const todas = loadLocal();
-    const atual = todas.find((b) => b.rastro === rastro);
-    if (!atual) return null;
+    const alvo = todas.find((b) => b.rastro === rastro);
 
-    atual.fotos = [...(atual.fotos || []), base64];
+    if (!alvo) return null;
+
+    alvo.fotos = [...(alvo.fotos || []), base64];
     saveLocal(todas);
 
-    return { ok: true };
+    return { ok: true, base64 };
   }
 }
 
@@ -185,19 +225,21 @@ export async function deleteFoto(rastro, index) {
       method: "DELETE",
     });
   } catch {
-    console.warn("⚠ deleteFoto offline → local");
+    console.warn("⚠ deleteFoto offline → local fallback");
 
     const todas = loadLocal();
-    const atual = todas.find((b) => b.rastro === rastro);
+    const alvo = todas.find((b) => b.rastro === rastro);
 
-    if (!atual) return;
+    if (!alvo) return;
 
-    atual.fotos = atual.fotos.filter((_, i) => i !== index);
+    alvo.fotos = alvo.fotos.filter((_, i) => i !== index);
     saveLocal(todas);
   }
 }
 
-// =============== ARQUIVOS ===============
+// ========================================================
+// 🔵 API → ARQUIVOS
+// ========================================================
 export async function addArquivo(rastro, arquivo) {
   try {
     const res = await fetch(`${API_URL}/bobinas/${rastro}/arquivos`, {
@@ -208,17 +250,19 @@ export async function addArquivo(rastro, arquivo) {
 
     if (!res.ok) throw new Error();
     return await res.json();
+
   } catch {
-    console.warn("⚠ addArquivo offline → local");
+    console.warn("⚠ addArquivo offline → fallback local");
 
     const todas = loadLocal();
-    const atual = todas.find((b) => b.rastro === rastro);
-    if (!atual) return;
+    const alvo = todas.find((b) => b.rastro === rastro);
 
-    atual.arquivos = [...(atual.arquivos || []), arquivo];
+    if (!alvo) return;
+
+    alvo.arquivos = [...(alvo.arquivos || []), arquivo];
     saveLocal(todas);
 
-    return { ok: true };
+    return { ok: true, arquivo };
   }
 }
 
@@ -228,19 +272,21 @@ export async function deleteArquivo(rastro, index) {
       method: "DELETE",
     });
   } catch {
-    console.warn("⚠ deleteArquivo offline → local");
+    console.warn("⚠ deleteArquivo offline → fallback local");
 
     const todas = loadLocal();
-    const atual = todas.find((b) => b.rastro === rastro);
+    const alvo = todas.find((b) => b.rastro === rastro);
 
-    if (!atual) return;
+    if (!alvo) return;
 
-    atual.arquivos = atual.arquivos.filter((_, i) => i !== index);
+    alvo.arquivos = alvo.arquivos.filter((_, i) => i !== index);
     saveLocal(todas);
   }
 }
 
-// =============== PRODUÇÃO ===============
+// ========================================================
+// 🔵 API → PRODUÇÃO
+// ========================================================
 export async function addPeca(rastro, peca) {
   try {
     const res = await fetch(`${API_URL}/bobinas/${rastro}/producao`, {
@@ -248,14 +294,18 @@ export async function addPeca(rastro, peca) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(peca),
     });
+
+    if (!res.ok) throw new Error();
+
     return await res.json();
+
   } catch {
-    console.warn("⚠ addPeca offline → local");
+    console.warn("⚠ addPeca offline → fallback local");
 
     const todas = loadLocal();
-    const atual = todas.find((b) => b.rastro === rastro);
+    const alvo = todas.find((b) => b.rastro === rastro);
 
-    atual.producao = [...(atual.producao || []), peca];
+    alvo.producao = [...(alvo.producao || []), peca];
     saveLocal(todas);
 
     return peca;
@@ -268,11 +318,12 @@ export async function deletePeca(rastro, index) {
       method: "DELETE",
     });
   } catch {
-    console.warn("⚠ deletePeca offline → local");
-    const todas = loadLocal();
-    const atual = todas.find((b) => b.rastro === rastro);
+    console.warn("⚠ deletePeca offline → fallback local");
 
-    atual.producao = atual.producao.filter((_, i) => i !== index);
+    const todas = loadLocal();
+    const alvo = todas.find((b) => b.rastro === rastro);
+
+    alvo.producao = alvo.producao.filter((_, i) => i !== index);
     saveLocal(todas);
   }
 }
