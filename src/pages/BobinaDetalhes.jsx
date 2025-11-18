@@ -3,11 +3,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar.jsx";
 import { QRCodeCanvas } from "qrcode.react";
-import { loadLocal, saveLocal } from "../services/bobinasService.js";
+import { loadLocal, saveLocal, fetchBobinaDetalhe, updateBobina } from "../services/bobinasService.js";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import ProducaoBobina from "../components/ProducaoBobina.jsx";
-
 
 import "../styles/BobinaDetalhes.css";
 
@@ -23,19 +22,49 @@ export default function BobinaDetalhesPage() {
 
   const [dados, setDados] = useState({});
 
-  // CARREGA A BOBINA
+  // ============================================================
+  // 🔥 CARREGAR DO BACKEND (RAILWAY) → FALLBACK LOCAL
+  // ============================================================
   useEffect(() => {
-    const todas = loadLocal();
-    const encontrada = todas.find((b) => b.rastro === rastro);
+    async function carregar() {
+      try {
+        const encontrada = await fetchBobinaDetalhe(rastro);
 
-    if (encontrada) {
-      encontrada.fotos = encontrada.fotos || [];
-      encontrada.arquivos = encontrada.arquivos || [];
-      setBobina(encontrada);
-      setDados(encontrada);
+        if (!encontrada) {
+          setBobina(null);
+          return;
+        }
+
+        encontrada.fotos = encontrada.fotos || [];
+        encontrada.arquivos = encontrada.arquivos || [];
+        encontrada.producoes = encontrada.producoes || [];
+        encontrada.historicos = encontrada.historicos || [];
+
+        setBobina(encontrada);
+        setDados(encontrada);
+
+        // sincroniza fallback local
+        const todas = loadLocal().filter((b) => b.rastro !== encontrada.rastro);
+        saveLocal([...todas, encontrada]);
+
+      } catch (err) {
+        console.warn("API offline — carregando localStorage", err);
+
+        const local = loadLocal().find((b) => b.rastro === rastro);
+
+        if (local) {
+          setBobina(local);
+          setDados(local);
+        } else {
+          setBobina(null);
+        }
+      }
     }
+
+    carregar();
   }, [rastro]);
 
+  // Caso ainda esteja carregando ou não encontrou
   if (!bobina) {
     return (
       <div className="detalhes-layout">
@@ -48,7 +77,9 @@ export default function BobinaDetalhesPage() {
     );
   }
 
-  // SENHA
+  // ============================================================
+  // 🔐 SENHA PARA EDIÇÃO
+  // ============================================================
   function habilitarEdicao() {
     if (senhaDigitada === "bundy123") {
       setModoEdicao(true);
@@ -58,20 +89,38 @@ export default function BobinaDetalhesPage() {
     }
   }
 
-  // SALVAR ALTERAÇÕES
-  function salvarAlteracoes() {
-    const todas = loadLocal();
-    const outras = todas.filter((b) => b.rastro !== bobina.rastro);
+  // ============================================================
+  // 💾 SALVAR ALTERAÇÕES NO BACKEND + LOCAL
+  // ============================================================
+  async function salvarAlteracoes() {
+    try {
+      const atualizado = await updateBobina(rastro, dados);
 
-    const alterado = { ...bobina, ...dados };
+      setBobina(atualizado);
+      setDados(atualizado);
 
-    saveLocal([...outras, alterado]);
-    setBobina(alterado);
-    setMensagem("Alterações salvas!");
+      const todas = loadLocal().filter((b) => b.rastro !== rastro);
+      saveLocal([...todas, atualizado]);
+
+      setMensagem("Alterações salvas no servidor!");
+    } catch (err) {
+      console.warn("Erro ao atualizar no backend — usando local", err);
+
+      const todas = loadLocal().filter((b) => b.rastro !== rastro);
+      const alteradoLocal = { ...bobina, ...dados };
+
+      saveLocal([...todas, alteradoLocal]);
+      setBobina(alteradoLocal);
+
+      setMensagem("API offline — Alterações salvas apenas localmente.");
+    }
+
     setModoEdicao(false);
   }
 
-  // FOTO → base64
+  // ============================================================
+  // 📸 FOTOS (base64)
+  // ============================================================
   function adicionarFoto(e) {
     const arquivo = e.target.files[0];
     if (!arquivo) return;
@@ -93,7 +142,9 @@ export default function BobinaDetalhesPage() {
     });
   }
 
-  // ARQUIVOS → base64
+  // ============================================================
+  // 📎 ARQUIVOS (base64)
+  // ============================================================
   function adicionarArquivo(e) {
     const arquivo = e.target.files[0];
     if (!arquivo) return;
@@ -121,50 +172,53 @@ export default function BobinaDetalhesPage() {
     });
   }
 
+  // ============================================================
+  // ✏️ CAMPOS DE TEXTO
+  // ============================================================
   function atualizarCampo(campo, valor) {
     setDados({ ...dados, [campo]: valor });
   }
 
   const urlQR = `${window.location.origin}/bobina/${rastro}`;
 
+  // ============================================================
+  // 🖨️ IMPRESSÃO / PDF
+  // ============================================================
   function imprimirDetalhes() {
     window.print();
   }
+
   async function gerarPDF() {
-  const pdf = new jsPDF("p", "mm", "a4");
+    const pdf = new jsPDF("p", "mm", "a4");
 
-  const container = document.querySelector(".detalhes-content");
+    const container = document.querySelector(".detalhes-content");
 
-  // tira screenshot da área da página
-  const canvas = await html2canvas(container, {
-    scale: 2,
-    backgroundColor: "#FFFFFF"
-  });
+    const canvas = await html2canvas(container, {
+      scale: 2,
+      backgroundColor: "#FFFFFF"
+    });
 
-  const imgData = canvas.toDataURL("image/png");
+    const imgData = canvas.toDataURL("image/png");
 
-  const imgWidth = 210; // largura A4
-  const pageHeight = 297; 
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    const imgWidth = 210;
+    const pageHeight = 297;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-  let heightLeft = imgHeight;
-  let position = 0;
+    let heightLeft = imgHeight;
+    let position = 0;
 
-  // primeira página
-  pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-  heightLeft -= pageHeight;
-
-  // se tiver mais de 1 página
-  while (heightLeft >= 0) {
-    position = heightLeft - imgHeight;
-    pdf.addPage();
     pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
     heightLeft -= pageHeight;
+
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    pdf.save(`Bobina_${rastro}.pdf`);
   }
-
-  pdf.save(`Bobina_${rastro}.pdf`);
-}
-
 
   // ============================================================
   // ===================== RENDERIZAÇÃO =========================
@@ -175,7 +229,6 @@ export default function BobinaDetalhesPage() {
       <Sidebar />
 
       <main className="detalhes-content">
-
         {/* CABEÇALHO */}
         <div className="details-title-panel">
           <div>
@@ -216,21 +269,21 @@ export default function BobinaDetalhesPage() {
               <h2>Informações Gerais</h2>
               <div className="details-grid">
 
-                <div data-print={dados.operador}>
+                <div>
                   <label>Operador</label>
                   <input disabled={!modoEdicao}
                     value={dados.operador}
                     onChange={(e) => atualizarCampo("operador", e.target.value)} />
                 </div>
 
-                <div data-print={dados.matricula}>
+                <div>
                   <label>Matrícula</label>
                   <input disabled={!modoEdicao}
                     value={dados.matricula}
                     onChange={(e) => atualizarCampo("matricula", e.target.value)} />
                 </div>
 
-                <div data-print={dados.linha}>
+                <div>
                   <label>Linha</label>
                   <select disabled={!modoEdicao}
                     value={dados.linha}
@@ -240,7 +293,7 @@ export default function BobinaDetalhesPage() {
                   </select>
                 </div>
 
-                <div data-print={dados.turno}>
+                <div>
                   <label>Turno</label>
                   <select disabled={!modoEdicao}
                     value={dados.turno}
@@ -251,7 +304,7 @@ export default function BobinaDetalhesPage() {
                   </select>
                 </div>
 
-                <div data-print={dados.origem}>
+                <div>
                   <label>Origem</label>
                   <select disabled={!modoEdicao}
                     value={dados.origem}
@@ -261,7 +314,7 @@ export default function BobinaDetalhesPage() {
                   </select>
                 </div>
 
-                <div data-print={dados.data}>
+                <div>
                   <label>Data</label>
                   <input type="date" disabled={!modoEdicao}
                     value={dados.data}
@@ -277,35 +330,35 @@ export default function BobinaDetalhesPage() {
 
               <div className="details-grid">
 
-                <div data-print={dados.tipo}>
+                <div>
                   <label>Tipo</label>
                   <input disabled={!modoEdicao}
                     value={dados.tipo}
                     onChange={(e) => atualizarCampo("tipo", e.target.value)} />
                 </div>
 
-                <div data-print={dados.diametro}>
+                <div>
                   <label>Diâmetro</label>
                   <input disabled={!modoEdicao}
                     value={dados.diametro}
                     onChange={(e) => atualizarCampo("diametro", e.target.value)} />
                 </div>
 
-                <div data-print={dados.furos}>
+                <div>
                   <label>Furos</label>
                   <input disabled={!modoEdicao}
                     value={dados.furos}
                     onChange={(e) => atualizarCampo("furos", e.target.value)} />
                 </div>
 
-                <div data-print={dados.comprimento}>
+                <div>
                   <label>Comprimento (m)</label>
                   <input disabled={!modoEdicao}
                     value={dados.comprimento}
                     onChange={(e) => atualizarCampo("comprimento", e.target.value)} />
                 </div>
 
-                <div data-print={dados.peso}>
+                <div>
                   <label>Peso (kg)</label>
                   <input disabled={!modoEdicao}
                     value={dados.peso}
@@ -321,7 +374,7 @@ export default function BobinaDetalhesPage() {
 
               <div className="details-grid">
 
-                <div data-print={dados.status}>
+                <div>
                   <label>Status</label>
                   <select disabled={!modoEdicao}
                     value={dados.status}
@@ -332,7 +385,7 @@ export default function BobinaDetalhesPage() {
                   </select>
                 </div>
 
-                <div data-print={dados.observacoes} style={{ gridColumn: "1 / -1" }}>
+                <div style={{ gridColumn: "1 / -1" }}>
                   <label>Observações</label>
                   <textarea disabled={!modoEdicao}
                     rows={3}
@@ -342,7 +395,6 @@ export default function BobinaDetalhesPage() {
 
               </div>
             </div>
-            
 
             {modoEdicao && (
               <button className="save-btn" onClick={salvarAlteracoes}>
@@ -362,8 +414,9 @@ export default function BobinaDetalhesPage() {
                 <QRCodeCanvas value={urlQR} size={220} />
               </div>
             </div>
-            <ProducaoBobina dados={dados} setDados={setDados} modoEdicao={modoEdicao} />
 
+            {/* PRODUÇÃO */}
+            <ProducaoBobina dados={dados} setDados={setDados} modoEdicao={modoEdicao} />
 
             {/* ARQUIVOS */}
             <div className="details-panel">
