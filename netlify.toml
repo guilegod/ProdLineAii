@@ -1,5 +1,5 @@
 [build]
-  base = "ProdLineAii"
+  base = "ProdLineAi"
   publish = "dist"
   command = "npm run build"
 
