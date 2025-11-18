@@ -23,7 +23,7 @@ export default function BobinaDetalhesPage() {
   const [dados, setDados] = useState({});
 
   // ============================================================
-  // 🔥 CARREGAR DO BACKEND (RAILWAY) → FALLBACK LOCAL
+  // 🔥 CARREGAR DO BACKEND + FALLBACK LOCAL
   // ============================================================
   useEffect(() => {
     async function carregar() {
@@ -35,15 +35,16 @@ export default function BobinaDetalhesPage() {
           return;
         }
 
+        // 🔥 CORREÇÃO: garantir nomes REALMENTE retornados pela API
         encontrada.fotos = encontrada.fotos || [];
         encontrada.arquivos = encontrada.arquivos || [];
-        encontrada.producoes = encontrada.producoes || [];
-        encontrada.historicos = encontrada.historicos || [];
+        encontrada.producao = encontrada.producao || []; 
+        encontrada.historicoQualidade = encontrada.historicoQualidade || [];
 
         setBobina(encontrada);
         setDados(encontrada);
 
-        // sincroniza fallback local
+        // sincroniza localStorage
         const todas = loadLocal().filter((b) => b.rastro !== encontrada.rastro);
         saveLocal([...todas, encontrada]);
 
@@ -53,6 +54,11 @@ export default function BobinaDetalhesPage() {
         const local = loadLocal().find((b) => b.rastro === rastro);
 
         if (local) {
+          local.fotos = local.fotos || [];
+          local.arquivos = local.arquivos || [];
+          local.producao = local.producao || [];
+          local.historicoQualidade = local.historicoQualidade || [];
+
           setBobina(local);
           setDados(local);
         } else {
@@ -64,7 +70,7 @@ export default function BobinaDetalhesPage() {
     carregar();
   }, [rastro]);
 
-  // Caso ainda esteja carregando ou não encontrou
+  // Caso não encontrou
   if (!bobina) {
     return (
       <div className="detalhes-layout">
@@ -90,11 +96,16 @@ export default function BobinaDetalhesPage() {
   }
 
   // ============================================================
-  // 💾 SALVAR ALTERAÇÕES NO BACKEND + LOCAL
+  // 💾 SALVAR ALTERAÇÕES
   // ============================================================
   async function salvarAlteracoes() {
     try {
       const atualizado = await updateBobina(rastro, dados);
+
+      atualizado.fotos = atualizado.fotos || [];
+      atualizado.arquivos = atualizado.arquivos || [];
+      atualizado.producao = atualizado.producao || [];
+      atualizado.historicoQualidade = atualizado.historicoQualidade || [];
 
       setBobina(atualizado);
       setDados(atualizado);
@@ -104,22 +115,20 @@ export default function BobinaDetalhesPage() {
 
       setMensagem("Alterações salvas no servidor!");
     } catch (err) {
-      console.warn("Erro ao atualizar no backend — usando local", err);
+      console.warn("Erro ao atualizar API — salvando local", err);
 
-      const todas = loadLocal().filter((b) => b.rastro !== rastro);
-      const alteradoLocal = { ...bobina, ...dados };
+      const local = { ...bobina, ...dados };
+      saveLocal([...loadLocal().filter((b) => b.rastro !== rastro), local]);
+      setBobina(local);
 
-      saveLocal([...todas, alteradoLocal]);
-      setBobina(alteradoLocal);
-
-      setMensagem("API offline — Alterações salvas apenas localmente.");
+      setMensagem("API offline — Alterações salvas localmente.");
     }
 
     setModoEdicao(false);
   }
 
   // ============================================================
-  // 📸 FOTOS (base64)
+  // Fotos / Arquivos / Campos
   // ============================================================
   function adicionarFoto(e) {
     const arquivo = e.target.files[0];
@@ -127,54 +136,37 @@ export default function BobinaDetalhesPage() {
 
     const leitor = new FileReader();
     leitor.onload = (ev) => {
-      setDados({
-        ...dados,
-        fotos: [...dados.fotos, ev.target.result],
-      });
+      setDados({ ...dados, fotos: [...dados.fotos, ev.target.result] });
     };
     leitor.readAsDataURL(arquivo);
   }
 
   function excluirFoto(i) {
-    setDados({
-      ...dados,
-      fotos: dados.fotos.filter((_, x) => x !== i),
-    });
+    setDados({ ...dados, fotos: dados.fotos.filter((_, x) => x !== i) });
   }
 
-  // ============================================================
-  // 📎 ARQUIVOS (base64)
-  // ============================================================
   function adicionarArquivo(e) {
     const arquivo = e.target.files[0];
     if (!arquivo) return;
 
     const leitor = new FileReader();
     leitor.onload = (ev) => {
-      const novo = {
-        nome: arquivo.name,
-        tipo: arquivo.type,
-        base64: ev.target.result,
-      };
-
       setDados({
         ...dados,
-        arquivos: [...dados.arquivos, novo],
+        arquivos: [...dados.arquivos, {
+          nome: arquivo.name,
+          tipo: arquivo.type,
+          base64: ev.target.result,
+        }],
       });
     };
     leitor.readAsDataURL(arquivo);
   }
 
   function excluirArquivo(i) {
-    setDados({
-      ...dados,
-      arquivos: dados.arquivos.filter((_, x) => x !== i),
-    });
+    setDados({ ...dados, arquivos: dados.arquivos.filter((_, x) => x !== i) });
   }
 
-  // ============================================================
-  // ✏️ CAMPOS DE TEXTO
-  // ============================================================
   function atualizarCampo(campo, valor) {
     setDados({ ...dados, [campo]: valor });
   }
@@ -182,7 +174,7 @@ export default function BobinaDetalhesPage() {
   const urlQR = `${window.location.origin}/bobina/${rastro}`;
 
   // ============================================================
-  // 🖨️ IMPRESSÃO / PDF
+  // PDF / PRINT
   // ============================================================
   function imprimirDetalhes() {
     window.print();
@@ -190,14 +182,9 @@ export default function BobinaDetalhesPage() {
 
   async function gerarPDF() {
     const pdf = new jsPDF("p", "mm", "a4");
-
     const container = document.querySelector(".detalhes-content");
 
-    const canvas = await html2canvas(container, {
-      scale: 2,
-      backgroundColor: "#FFFFFF"
-    });
-
+    const canvas = await html2canvas(container, { scale: 2, backgroundColor: "#FFFFFF" });
     const imgData = canvas.toDataURL("image/png");
 
     const imgWidth = 210;
@@ -221,15 +208,15 @@ export default function BobinaDetalhesPage() {
   }
 
   // ============================================================
-  // ===================== RENDERIZAÇÃO =========================
+  // RENDER
   // ============================================================
-
   return (
     <div className="detalhes-layout">
       <Sidebar />
 
       <main className="detalhes-content">
-        {/* CABEÇALHO */}
+
+        {/* título */}
         <div className="details-title-panel">
           <div>
             <h1>Detalhes da Bobina</h1>
@@ -243,7 +230,7 @@ export default function BobinaDetalhesPage() {
           </div>
         </div>
 
-        {/* SENHA */}
+        {/* senha */}
         {!modoEdicao && (
           <div className="senha-panel">
             <span>Insira a senha para editar:</span>
@@ -258,36 +245,30 @@ export default function BobinaDetalhesPage() {
 
         {mensagem && <p className="mensagem">{mensagem}</p>}
 
-        {/* GRID PRINCIPAL */}
+        {/* GRID */}
         <div className="detalhes-duas-colunas">
 
-          {/* COLUNA ESQUERDA */}
+          {/* ESQUERDA */}
           <div className="coluna-esquerda">
 
-            {/* INFORMAÇÕES GERAIS */}
+            {/* informações gerais */}
             <div className="details-panel">
               <h2>Informações Gerais</h2>
-              <div className="details-grid">
 
+              <div className="details-grid">
                 <div>
                   <label>Operador</label>
-                  <input disabled={!modoEdicao}
-                    value={dados.operador}
-                    onChange={(e) => atualizarCampo("operador", e.target.value)} />
+                  <input disabled={!modoEdicao} value={dados.operador} onChange={(e) => atualizarCampo("operador", e.target.value)} />
                 </div>
 
                 <div>
                   <label>Matrícula</label>
-                  <input disabled={!modoEdicao}
-                    value={dados.matricula}
-                    onChange={(e) => atualizarCampo("matricula", e.target.value)} />
+                  <input disabled={!modoEdicao} value={dados.matricula} onChange={(e) => atualizarCampo("matricula", e.target.value)} />
                 </div>
 
                 <div>
                   <label>Linha</label>
-                  <select disabled={!modoEdicao}
-                    value={dados.linha}
-                    onChange={(e) => atualizarCampo("linha", e.target.value)}>
+                  <select disabled={!modoEdicao} value={dados.linha} onChange={(e) => atualizarCampo("linha", e.target.value)}>
                     <option value="L1">Linha 01</option>
                     <option value="L2">Linha 02</option>
                   </select>
@@ -295,9 +276,7 @@ export default function BobinaDetalhesPage() {
 
                 <div>
                   <label>Turno</label>
-                  <select disabled={!modoEdicao}
-                    value={dados.turno}
-                    onChange={(e) => atualizarCampo("turno", e.target.value)}>
+                  <select disabled={!modoEdicao} value={dados.turno} onChange={(e) => atualizarCampo("turno", e.target.value)}>
                     <option>1º Turno</option>
                     <option>2º Turno</option>
                     <option>3º Turno</option>
@@ -306,9 +285,7 @@ export default function BobinaDetalhesPage() {
 
                 <div>
                   <label>Origem</label>
-                  <select disabled={!modoEdicao}
-                    value={dados.origem}
-                    onChange={(e) => atualizarCampo("origem", e.target.value)}>
+                  <select disabled={!modoEdicao} value={dados.origem} onChange={(e) => atualizarCampo("origem", e.target.value)}>
                     <option value="Bundy">Bundy</option>
                     <option value="Concorrente">Concorrente</option>
                   </select>
@@ -316,15 +293,13 @@ export default function BobinaDetalhesPage() {
 
                 <div>
                   <label>Data</label>
-                  <input type="date" disabled={!modoEdicao}
-                    value={dados.data}
-                    onChange={(e) => atualizarCampo("data", e.target.value)} />
+                  <input type="date" disabled={!modoEdicao} value={dados.data} onChange={(e) => atualizarCampo("data", e.target.value)} />
                 </div>
 
               </div>
             </div>
 
-            {/* CARACTERÍSTICAS TÉCNICAS */}
+            {/* características */}
             <div className="details-panel">
               <h2>Características Técnicas</h2>
 
@@ -332,53 +307,40 @@ export default function BobinaDetalhesPage() {
 
                 <div>
                   <label>Tipo</label>
-                  <input disabled={!modoEdicao}
-                    value={dados.tipo}
-                    onChange={(e) => atualizarCampo("tipo", e.target.value)} />
+                  <input disabled={!modoEdicao} value={dados.tipo} onChange={(e) => atualizarCampo("tipo", e.target.value)} />
                 </div>
 
                 <div>
                   <label>Diâmetro</label>
-                  <input disabled={!modoEdicao}
-                    value={dados.diametro}
-                    onChange={(e) => atualizarCampo("diametro", e.target.value)} />
+                  <input disabled={!modoEdicao} value={dados.diametro} onChange={(e) => atualizarCampo("diametro", e.target.value)} />
                 </div>
 
                 <div>
                   <label>Furos</label>
-                  <input disabled={!modoEdicao}
-                    value={dados.furos}
-                    onChange={(e) => atualizarCampo("furos", e.target.value)} />
+                  <input disabled={!modoEdicao} value={dados.furos} onChange={(e) => atualizarCampo("furos", e.target.value)} />
                 </div>
 
                 <div>
                   <label>Comprimento (m)</label>
-                  <input disabled={!modoEdicao}
-                    value={dados.comprimento}
-                    onChange={(e) => atualizarCampo("comprimento", e.target.value)} />
+                  <input disabled={!modoEdicao} value={dados.comprimento} onChange={(e) => atualizarCampo("comprimento", e.target.value)} />
                 </div>
 
                 <div>
                   <label>Peso (kg)</label>
-                  <input disabled={!modoEdicao}
-                    value={dados.peso}
-                    onChange={(e) => atualizarCampo("peso", e.target.value)} />
+                  <input disabled={!modoEdicao} value={dados.peso} onChange={(e) => atualizarCampo("peso", e.target.value)} />
                 </div>
 
               </div>
             </div>
 
-            {/* STATUS */}
+            {/* status */}
             <div className="details-panel">
               <h2>Status</h2>
 
               <div className="details-grid">
-
                 <div>
                   <label>Status</label>
-                  <select disabled={!modoEdicao}
-                    value={dados.status}
-                    onChange={(e) => atualizarCampo("status", e.target.value)}>
+                  <select disabled={!modoEdicao} value={dados.status} onChange={(e) => atualizarCampo("status", e.target.value)}>
                     <option value="Liberada">Liberada</option>
                     <option value="Aguardando Laudo">Aguardando Laudo</option>
                     <option value="Bloqueada">Bloqueada</option>
@@ -387,12 +349,8 @@ export default function BobinaDetalhesPage() {
 
                 <div style={{ gridColumn: "1 / -1" }}>
                   <label>Observações</label>
-                  <textarea disabled={!modoEdicao}
-                    rows={3}
-                    value={dados.observacoes}
-                    onChange={(e) => atualizarCampo("observacoes", e.target.value)} />
+                  <textarea disabled={!modoEdicao} rows={3} value={dados.observacoes} onChange={(e) => atualizarCampo("observacoes", e.target.value)} />
                 </div>
-
               </div>
             </div>
 
@@ -401,13 +359,12 @@ export default function BobinaDetalhesPage() {
                 💾 Salvar Alterações
               </button>
             )}
-
           </div>
 
-          {/* COLUNA DIREITA */}
+          {/* DIREITA */}
           <div className="coluna-direita">
 
-            {/* QR CODE */}
+            {/* QR */}
             <div className="details-panel">
               <h2>QR Code</h2>
               <div className="qr-box">
@@ -416,7 +373,12 @@ export default function BobinaDetalhesPage() {
             </div>
 
             {/* PRODUÇÃO */}
-            <ProducaoBobina dados={dados} setDados={setDados} modoEdicao={modoEdicao} />
+            <ProducaoBobina 
+              dados={dados}
+              setDados={setDados}
+              producao={dados.producao}
+              modoEdicao={modoEdicao}
+            />
 
             {/* ARQUIVOS */}
             <div className="details-panel">
@@ -477,14 +439,14 @@ export default function BobinaDetalhesPage() {
           </div>
         </div>
 
-        {/* MODAL FOTO */}
+        {/* modal foto */}
         {modalFoto && (
           <div className="modal-foto-backdrop" onClick={() => setModalFoto(null)}>
             <img src={modalFoto} className="modal-foto-img" />
           </div>
         )}
 
-        {/* MODAL QR */}
+        {/* modal QR */}
         {modalQR && (
           <div className="modal-qr-backdrop" onClick={() => setModalQR(false)}>
             <div className="modal-qr-content">
