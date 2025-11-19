@@ -167,3 +167,231 @@
 .btn-detalhes:hover {
   background: linear-gradient(135deg, #1b8cff, #1472dd);
 }
+/* ========================================= */
+/* CARD QUALIDADE — NOVO DESIGN */
+/* ========================================= */
+
+.qualidade-card {
+  background: #0d1117;           /* Fundo dark elegante */
+  border-radius: 18px;
+  padding: 22px;
+  color: #e5e7eb;                /* Texto mais claro */
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  transition: 0.2s;
+  border: 1px solid #1f2937;
+}
+
+.qualidade-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+
+/* TÍTULO (RASTRO) */
+.qualidade-card h2 {
+  font-size: 26px;
+  color: #60a5fa; /* Azul suave */
+  margin-bottom: 5px;
+}
+
+/* OPERADOR / STATUS */
+.qualidade-card p {
+  font-size: 15px;
+  color: #cbd5e1 !important; /* Texto claro */
+  text-align: center;
+}
+
+/* STATUS BADGE */
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: bold;
+  margin-left: 6px;
+}
+
+.status-liberada {
+  background: #10b98133;
+  color: #10b981;
+  border: 1px solid #10b98155;
+}
+
+.status-bloqueada {
+  background: #ef444433;
+  color: #ef4444;
+  border: 1px solid #ef444466;
+}
+
+.status-aguardando {
+  background: #facc1533;
+  color: #facc15;
+  border: 1px solid #facc1555;
+}
+
+/* BOTÕES */
+.card-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-q {
+  width: 100%;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s;
+}
+
+/* Liberar */
+.btn-liberar {
+  background: #16a34a;
+  color: white;
+}
+.btn-liberar:hover {
+  background: #22c55e;
+}
+
+/* Bloquear */
+.btn-bloquear {
+  background: #dc2626;
+  color: white;
+}
+.btn-bloquear:hover {
+  background: #ef4444;
+}
+
+/* Anexar Laudo */
+.btn-laudo {
+  background: #1e293b;
+  color: #cbd5e1;
+  position: relative;
+}
+.btn-laudo:hover {
+  background: #334155;
+}
+
+.btn-laudo input {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* Botão detalhes */
+.btn-detalhes {
+  background: #2563eb;
+  color: white;
+}
+.btn-detalhes:hover {
+  background: #3b82f6;
+}
+/* ===================================================== */
+/* FILTRO */
+/* ===================================================== */
+.qualidade-filtros {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.qualidade-filtros select {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  cursor: pointer;
+}
+
+
+/* ===================================================== */
+/* BOTÃO VER ARQUIVOS */
+/* ===================================================== */
+.btn-view-file {
+  background: #0ea5e9;
+  color: white;
+}
+.btn-view-file:hover {
+  background: #38bdf8;
+}
+
+
+/* ===================================================== */
+/* MODAL DE ARQUIVOS */
+/* ===================================================== */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: #0009;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 26px;
+  border-radius: 16px;
+  width: 420px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-content h2 {
+  margin-bottom: 16px;
+  font-size: 22px;
+  color: #38bdf8;
+}
+
+.modal-files-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.modal-files-list li {
+  display: flex;
+  justify-content: space-between;
+  background: #1e293b;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.modal-download {
+  color: #38bdf8;
+  text-decoration: underline;
+}
+
+.modal-close {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  background: #ef4444;
+  color: white;
+  font-size: 16px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -1,49 +1,84 @@
 /* ==========================================================
-   ESTOQUE PREMIUM — VISUAL CORPORATIVO 2025
+   ESTOQUE — THEME INDUSTRIAL CLEAN 2025
+   Mesmo padrão visual das páginas Detalhes / Produção
 ========================================================== */
 
-/* --------- HEADER --------- */
+:root {
+  --bg-main: #e7ebf1;
+  --bg-card: #ffffff;
+  --border-color: #c5ccd8;
+  --border-strong: #a7b0c1;
+  --text-primary: #1A1F29;
+  --text-secondary: #5b667a;
+  --accent: #0d6efd;
+  --accent-hover: #0b5ed7;
+
+  --radius: 14px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.10);
+}
+
+/* --------------------------------------------- */
+/* LAYOUT GERAL */
+/* --------------------------------------------- */
+
+.estoque-page {
+  padding: 20px 40px;
+  margin-left: 240px;
+}
+
+@media (max-width: 900px) {
+  .estoque-page { margin-left: 0; padding: 20px; }
+}
+
+/* --------------------------------------------- */
+/* HEADER */
+/* --------------------------------------------- */
+
 .estoque-header {
-  background: linear-gradient(135deg, rgba(17, 32, 48, 0.92), rgba(10, 20, 32, 0.92));
-  padding: 38px 40px;
-  border-radius: 20px;
-  margin-bottom: 40px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(95, 168, 211, 0.25);
-  backdrop-filter: blur(8px);
+  background: var(--bg-card);
+  padding: 30px 35px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow);
+  margin-bottom: 35px;
 }
 
 .estoque-header h1 {
-  color: #8FDBFF;
-  font-size: 2.4rem;
-  font-weight: 600;
-  margin-bottom: 18px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 12px;
 }
 
 .dashboard {
   display: flex;
   flex-wrap: wrap;
   gap: 22px;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
 }
 
 .dashboard strong {
-  color: #9FE0FF;
+  color: var(--text-primary);
 }
 
-/* --------- FILTROS --------- */
+/* --------------------------------------------- */
+/* FILTROS */
+/* --------------------------------------------- */
+
 .filtros {
-  background: rgba(17, 32, 48, 0.92);
-  padding: 30px;
-  border-radius: 18px;
-  margin-bottom: 32px;
-  border: 1px solid rgba(95, 168, 211, 0.25);
-  box-shadow: 0 5px 20px rgba(0,0,0,0.45);
+  background: var(--bg-card);
+  padding: 26px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow);
+  margin-bottom: 26px;
 }
 
 .filtros h2 {
-  color: #8FDBFF;
+  color: var(--accent);
   margin-bottom: 16px;
+  font-size: 1.3rem;
+  font-weight: 600;
 }
 
 .filtro-container {
@@ -52,91 +87,98 @@
   gap: 12px;
 }
 
+/* Botões de filtro */
 .filtros button {
-  background: #1A2E45;
-  padding: 10px 18px;
+  background: #eef2f7;
+  padding: 10px 16px;
   border-radius: 10px;
-  border: 1px solid #27496D;
-  color: #DCEAF7;
-  transition: 0.25s;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
   font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 .filtros button:hover {
-  background: #2A4F72;
-  transform: translateY(-2px);
+  background: #dce3ed;
 }
 
-.filtros input {
-  background: #0D1E2C;
-  border: 1px solid #27496D;
+/* Campos */
+.filtros input,
+.filtros select {
+  background: white;
+  border: 1px solid var(--border-color);
   padding: 10px 14px;
   border-radius: 10px;
-  color: #DCEAF7;
+  color: var(--text-primary);
+  transition: 0.2s;
 }
 
-/* --------- MODO VISUAL --------- */
+.filtros input:focus,
+.filtros select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(13,110,253,0.15);
+}
+
+/* --------------------------------------------- */
+/* MODO VISUAL */
+/* --------------------------------------------- */
+
 .modo-visual {
-  background: rgba(17, 32, 48, 0.92);
-  padding: 22px;
-  border-radius: 18px;
-  margin-bottom: 36px;
-  border: 1px solid rgba(95, 168, 211, 0.25);
-  box-shadow: 0 5px 20px rgba(0,0,0,0.45);
+  background: var(--bg-card);
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow);
+  margin-bottom: 32px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .modo-visual label {
-  color: #8FDBFF;
+  color: var(--accent);
   font-weight: 600;
+  font-size: 1.1rem;
 }
 
-.modo-visual select {
-  background: #0E2030;
-  border: 1px solid #27496D;
-  padding: 10px 14px;
-  border-radius: 10px;
-  color: #DCEAF7;
-  font-weight: 500;
-}
+/* --------------------------------------------- */
+/* GRID DOS CARDS */
+/* --------------------------------------------- */
 
-/* --------- GRID DE CARDS --------- */
 .lista-bobinas {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 32px;
-  margin-top: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 30px;
+  padding-bottom: 40px;
 }
 
-/* ==========================================================
-   CARD PREMIUM
-========================================================== */
+/* --------------------------------------------- */
+/* CARD DA BOBINA */
+/* --------------------------------------------- */
 
 .card-bobina {
-  background: linear-gradient(135deg, rgba(16, 32, 48, 0.97), rgba(10, 20, 32, 0.97));
-  border-radius: 20px;
-  padding: 26px;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.55);
-  border: 1px solid rgba(90, 160, 210, 0.28);
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
   position: relative;
-  overflow: hidden;
-  transition: 0.25s;
-  min-height: 260px;
+  transition: 0.2s;
 }
 
 .card-bobina:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 16px 34px rgba(110,185,235,0.4);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 
 .left-status {
   position: absolute;
   left: 0;
   top: 0;
-  width: 12px;
+  width: 10px;
   height: 100%;
+  border-radius: 10px 0 0 10px;
 }
 
 .left-status.verde { background: #00C46E; }
@@ -144,51 +186,144 @@
 .left-status.vermelho { background: #FF4C4C; }
 
 .card-bobina h3 {
-  color: #9FDAFF;
+  color: var(--accent);
   text-align: center;
-  margin-bottom: 18px;
-  font-size: 1.35rem;
+  margin-bottom: 12px;
+  font-size: 1.3rem;
   font-weight: 600;
 }
 
 .card-bobina p {
+  color: var(--text-secondary);
+  margin: 6px 0;
   font-size: 0.95rem;
-  margin: 7px 0;
-  color: #D8ECFF;
 }
 
 /* Botão "Ver detalhes" */
 .btn-detalhes {
-  margin-top: 24px;
+  margin-top: 18px;
   padding: 12px;
-  background: linear-gradient(135deg, #1E90FF, #156BC4);
-  border-radius: 12px;
-  border: none;
+  background: var(--accent);
   color: white;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 10px;
   width: 100%;
-  text-align: center;
+  border: none;
+  font-size: 1rem;
   cursor: pointer;
-  transition: 0.25s;
+  transition: 0.2s;
 }
 
 .btn-detalhes:hover {
-  background: linear-gradient(135deg, #1a7bdb, #125ba5);
-  transform: translateY(-3px);
+  background: var(--accent-hover);
 }
 
-/* --------- MOBILE --------- */
+/* MOBILE */
 @media (max-width: 600px) {
-  .estoque-header h1 {
-    font-size: 1.8rem;
-  }
+  .lista-bobinas { grid-template-columns: 1fr; }
+  .estoque-header h1 { font-size: 1.6rem; }
+}
+/* ==========================================================
+   BOBINA CARD — INDUSTRIAL CLEAN 2025 (ATUALIZADO)
+========================================================== */
 
-  .lista-bobinas {
-    grid-template-columns: 1fr;
-  }
+.bobina-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  transition: 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
 
-  .card-bobina {
-    padding: 22px;
-  }
+.bobina-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+}
+
+/* BARRA LATERAL */
+.status-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 12px;
+  height: 100%;
+  border-radius: 10px 0 0 10px;
+}
+
+.status-bar.verde { background: #16c47f; }
+.status-bar.amarelo { background: #ffce3d; }
+.status-bar.vermelho { background: #ff4b4b; }
+
+/* CONTEÚDO DO CARD */
+.card-body {
+  margin-left: 8px;
+}
+
+/* BADGE */
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.status-badge.verde {
+  background: rgba(25, 200, 120, 0.15);
+  color: #0a8a56;
+  border: 1px solid #18b26f;
+}
+
+.status-badge.amarelo {
+  background: rgba(255, 215, 60, 0.18);
+  color: #a07d00;
+  border: 1px solid #e6b800;
+}
+
+.status-badge.vermelho {
+  background: rgba(255, 75, 75, 0.16);
+  color: #a62424;
+  border: 1px solid #ff3b3b;
+}
+
+/* RASTRO */
+.card-rastro {
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+/* INFO */
+.card-info p {
+  color: var(--text-secondary);
+  margin: 4px 0;
+  font-size: 0.92rem;
+}
+
+/* BOTÃO */
+.btn-ver-detalhes {
+  margin-top: 18px;
+  padding: 12px;
+  display: block;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.btn-ver-detalhes:hover {
+  background: var(--accent-hover);
 }

@@ -1,3 +1,5 @@
+// src/pages/EstoquePage.jsx
+
 import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar.jsx";
 import BobinaCard from "../components/BobinaCard.jsx";
@@ -11,16 +13,31 @@ export default function EstoquePage() {
   const [filtroStatus, setFiltroStatus] = useState("todas");
   const [busca, setBusca] = useState("");
   const [dataFiltro, setDataFiltro] = useState("");
-  const [visual, setVisual] = useState("estilo1");
 
+  // ============================================================
+  // CARREGAR DO BANCO OU LOCALSTORAGE
+  // ============================================================
   useEffect(() => {
     async function carregar() {
       const data = await fetchBobinas();
-      setBobinas(data);
+
+      // Normalização — garante compatibilidade com QualidadePage
+      const normalizadas = data.map((b) => ({
+        ...b,
+        status: b.status || "Aguardando Laudo",
+        arquivos: b.arquivos || [],
+        producao: b.producao || b.pecas || [],
+      }));
+
+      setBobinas(normalizadas);
     }
+
     carregar();
   }, []);
 
+  // ============================================================
+  // FILTROS
+  // ============================================================
   const bobinasFiltradas = bobinas
     .filter((b) => {
       if (filtroStatus === "todas") return true;
@@ -36,13 +53,18 @@ export default function EstoquePage() {
       return b.data === dataFiltro;
     });
 
+  // ============================================================
+  // RENDERIZAÇÃO
+  // ============================================================
   return (
     <div className="page-layout">
       <Sidebar />
 
       <main className="content">
 
-        {/* CABEÇALHO */}
+        {/* ============================= */}
+        {/*   CABEÇALHO DO ESTOQUE       */}
+        {/* ============================= */}
         <header className="estoque-header">
           <h1>Estoque de Bobinas</h1>
 
@@ -50,22 +72,30 @@ export default function EstoquePage() {
             <div>
               <strong>Total de Bobinas:</strong> {bobinas.length}
             </div>
+
             <div>
-              <strong>Peso Total (kg):</strong>
-              {" "}
-              {bobinas.reduce((acc, b) => acc + Number(b.peso || 0), 0).toFixed(2)}
+              <strong>Peso Total (kg):</strong>{" "}
+              {bobinas
+                .reduce((acc, b) => acc + Number(b.peso || 0), 0)
+                .toFixed(2)}
             </div>
           </div>
         </header>
 
-        {/* FILTROS */}
+        {/* ============================= */}
+        {/*          FILTROS              */}
+        {/* ============================= */}
         <section className="filtros">
           <h2>Filtros</h2>
 
           <div className="filtro-container">
+
             <button onClick={() => setFiltroStatus("todas")}>Todas</button>
+
             <button onClick={() => setFiltroStatus("Liberada")}>Liberadas</button>
+
             <button onClick={() => setFiltroStatus("Aguardando Laudo")}>Aguardando</button>
+
             <button onClick={() => setFiltroStatus("Bloqueada")}>Bloqueadas</button>
 
             <input
@@ -83,17 +113,9 @@ export default function EstoquePage() {
           </div>
         </section>
 
-        {/* MODO VISUAL */}
-        <section className="modo-visual">
-          <label>🎨 Modo Visual:</label>
-          <select value={visual} onChange={(e) => setVisual(e.target.value)}>
-            <option value="estilo1">Industrial 3D</option>
-            <option value="estilo2">Dashboard Tecnológico</option>
-            <option value="estilo3">Minimalista Moderno</option>
-          </select>
-        </section>
-
-        {/* LISTA */}
+        {/* ============================= */}
+        {/*           LISTA              */}
+        {/* ============================= */}
         <section className="lista-bobinas">
           {bobinasFiltradas.length === 0 ? (
             <p>Nenhuma bobina encontrada.</p>
@@ -103,7 +125,6 @@ export default function EstoquePage() {
             ))
           )}
         </section>
-
       </main>
     </div>
   );

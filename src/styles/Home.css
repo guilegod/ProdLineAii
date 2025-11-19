@@ -1,0 +1,53 @@
+/* ==========================================================
+   HOME — INDUSTRIAL CLEAN DASHBOARD 2025
+========================================================== */
+
+.home-container {
+  padding: 30px 40px;
+}
+
+.home-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 30px;
+}
+
+/* GRID */
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
+}
+
+/* CARD */
+.home-card {
+  background: var(--bg-card);
+  padding: 26px 30px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  transition: 0.25s;
+}
+
+.home-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.home-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.home-card p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+/* ÍCONE */
+.icon-box {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
