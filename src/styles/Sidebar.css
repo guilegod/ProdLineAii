@@ -1,111 +1,185 @@
-/* =============================== */
-/*   SIDEBAR – ESTILO GERAL       */
-/* =============================== */
+/* ======================================= */
+/*     SIDEBAR – INDUSTRIAL CLEAN TECH     */
+/* ======================================= */
 
 .sidebar {
-  width: 240px;
-  background: #0b1a27;
-  color: #dceaf7;
+  width: 250px;
+  background: #0e1a24; /* azul petróleo escuro */
+  color: #e8f1f8;
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
-  padding: 20px 16px;
-  box-shadow: 3px 0 12px rgba(0, 0, 0, 0.4);
+
+  padding: 22px 18px;
+  box-shadow: 3px 0 18px rgba(0, 0, 0, 0.35);
+
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+
+  display: flex;
+  flex-direction: column;
+
   z-index: 200;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease;
 }
 
-/* Desktops – sidebar sempre aberta */
+/* DESKTOP */
 @media (min-width: 900px) {
   .sidebar {
     transform: translateX(0);
   }
 }
 
-/* Mobile – sidebar fechada por padrão */
+/* MOBILE */
 @media (max-width: 899px) {
   .sidebar {
-    transform: translateX(-260px);
+    transform: translateX(-270px);
   }
   .sidebar.open {
     transform: translateX(0);
   }
 }
 
-/* =============================== */
-/* SIDEBAR HEADER                  */
-/* =============================== */
+/* ======================================= */
+/*             HEADER DO SIDEBAR           */
+/* ======================================= */
 
 .sidebar-header {
-  text-align: center;
-  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 26px;
 }
 
-.sidebar-header h2 {
-  color: #7bc6ff;
-  font-size: 1.3rem;
+.sidebar-logo-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #133046;
+  border: 2px solid #4fa3ff;
+  color: #4fa3ff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+  font-weight: 700;
   letter-spacing: 1px;
+
+  box-shadow: 0 0 6px rgba(79,163,255,0.4);
 }
 
-/* =============================== */
-/* LINKS DO MENU                   */
-/* =============================== */
+.sidebar-title-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #7bc6ff;
+}
+
+.sidebar-subtitle {
+  font-size: 0.78rem;
+  color: #9ab4c7;
+  margin-top: -2px;
+}
+
+/* ======================================= */
+/*                LINKS                    */
+/* ======================================= */
 
 .sidebar-links {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+
+  margin-top: 10px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
   gap: 12px;
-}
 
-.sidebar-links a {
-  display: block;
   padding: 10px 14px;
-  color: #dceaf7;
-  text-decoration: none;
   border-radius: 8px;
-  transition: 0.2s;
-  font-size: 1rem;
+
+  text-decoration: none;
+  font-size: 0.98rem;
+
+  background: transparent;
+  color: #dbe7f3;
+
+  transition: 0.25s;
+  border: 1px solid transparent;
 }
 
-.sidebar-links a:hover {
-  background: #123047;
+.sidebar-link:hover {
+  background: #172a3c;
+  border-color: rgba(255,255,255,0.06);
 }
 
-.sidebar-links a:active {
-  transform: scale(0.97);
+.sidebar-link.active {
+  background: #1c3247;
+  border-color: #4fa3ff;
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(79,163,255,0.35);
 }
 
-/* =============================== */
-/* BOTÃO HAMBÚRGUER (MOBILE)       */
-/* =============================== */
+/* ÍCONES */
+.sidebar-icon {
+  font-size: 1.2rem;
+}
+
+.sidebar-text {
+  font-weight: 500;
+}
+
+/* ======================================= */
+/*      BOTÃO HAMBÚRGUER ( MOBILE )        */
+/* ======================================= */
 
 .hamburger-btn {
   position: fixed;
   top: 14px;
-  left: 12px;
-  background: #102030;
-  border: none;
-  color: #dceaf7;
-  font-size: 1.6rem;
-  padding: 8px 12px;
+  left: 14px;
+
+  background: #102533;
+  border: 1px solid #29465e;
+
+  color: #dbe7f3;
+  font-size: 1.5rem;
+  padding: 7px 12px;
+
   border-radius: 8px;
   cursor: pointer;
-  z-index: 250;
+
+  z-index: 300;
+
   display: none;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+
+  box-shadow: 0 3px 18px rgba(0, 0, 0, 0.45);
+  transition: 0.2s;
 }
 
-/* Mostra o botão somente no mobile */
+.hamburger-btn:hover {
+  background: #1a354a;
+  border-color: #4fa3ff;
+}
+
 @media (max-width: 899px) {
   .hamburger-btn {
     display: block;
   }
 }
 
-/* =============================== */
-/* OVERLAY – FUNDO ESCURO          */
-/* =============================== */
+/* ======================================= */
+/*               OVERLAY                   */
+/* ======================================= */
 
 .sidebar-overlay {
   position: fixed;
@@ -119,34 +193,32 @@
   display: block;
 }
 
-/* Desktop: overlay NUNCA aparece */
 @media (min-width: 900px) {
   .sidebar-overlay {
     display: none !important;
   }
 }
 
-/* =============================== */
-/* AJUSTE DO CONTEÚDO PRINCIPAL    */
-/* =============================== */
+/* ======================================= */
+/*        AJUSTES DE CONTEÚDO              */
+/* ======================================= */
 
 .page-layout,
 .detalhes-layout {
   display: flex;
 }
 
-/* Ajusta afastamento quando sidebar existe */
 .content,
 .detalhes-content {
   width: 100%;
-  margin-left: 240px; /* igual à largura do menu */
-  padding: 20px;
+  margin-left: 250px; /* largura do sidebar */
+  padding: 24px 32px;
 }
 
 @media (max-width: 899px) {
   .content,
   .detalhes-content {
-    margin-left: 0;   /* no mobile o menu é sobreposto */
-    padding: 16px;
+    margin-left: 0;
+    padding: 18px;
   }
 }
