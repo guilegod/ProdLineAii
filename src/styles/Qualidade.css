@@ -395,3 +395,60 @@
     transform: scale(1);
   }
 }
+/* ======================================= */
+/* RESPONSIVIDADE — MOBILE */
+/* ======================================= */
+@media (max-width: 600px) {
+
+  /* Grid mais flexível */
+  .qualidade-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  /* Card mais compacto */
+  .qualidade-card {
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .qualidade-card h2 {
+    font-size: 20px;
+  }
+
+  .qualidade-card p {
+    font-size: 14px !important;
+  }
+
+  /* Tabs */
+  .qualidade-tabs {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .qtab {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  /* Botões menores no celular */
+  .btn-q {
+    padding: 12px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+  }
+
+  /* Status badge */
+  .status-badge {
+    padding: 3px 8px;
+    font-size: 12px;
+  }
+
+  /* Modal tela cheia no mobile */
+  .modal-content {
+    width: 90%;
+    padding: 20px;
+  }
+}

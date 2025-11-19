@@ -265,3 +265,130 @@ button {
   justify-content: center;
   padding: 16px 0;
 }
+/* ====================================================== */
+/* 📱 RESPONSIVIDADE — MOBILE */
+/* ====================================================== */
+@media (max-width: 820px) {
+
+  /* Remove aquele GAP enorme lateral */
+  .detalhes-content {
+    padding: 20px;
+  }
+
+  /* Cabeçalho stackado */
+  .details-title-panel {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .details-title-panel h1 {
+    font-size: 26px;
+  }
+
+  /* GRID vira 1 coluna */
+  .detalhes-duas-colunas {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  /* Painéis mais compactos */
+  .details-panel {
+    padding: 18px 20px;
+  }
+
+  /* Reduz fontes */
+  .details-panel h2 {
+    font-size: 18px;
+  }
+
+  /* GRID dos campos mais compacto */
+  .details-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* Campos menores */
+  input,
+  select,
+  textarea {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  /* Botões */
+  .save-btn,
+  .btn-secundario {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  /* Galeria de fotos fica menor */
+  .photo-thumb-rect {
+    height: 100px;
+  }
+
+  /* Modal foto mais confortável */
+  .modal-foto-img {
+    max-width: 95vw;
+    max-height: 85vh;
+  }
+
+  /* Lista de arquivos */
+  .files-list li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .file-icon {
+    font-size: 20px;
+  }
+
+  /* Painel de senha */
+  .senha-panel {
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+  }
+}
+
+/* ====================================================== */
+/* 📱 SUPER MOBILE — 480px OU MENOS */
+/* ====================================================== */
+@media (max-width: 480px) {
+
+  .detalhes-content {
+    padding: 14px;
+  }
+
+  .details-title-panel h1 {
+    font-size: 22px;
+  }
+
+  .details-grid {
+    gap: 12px;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .details-panel {
+    padding: 16px 18px;
+  }
+
+  .photos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  }
+
+  .photo-thumb-rect {
+    height: 85px;
+  }
+
+}
