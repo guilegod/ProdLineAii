@@ -1,48 +1,207 @@
+.page-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+  padding: 40px 60px;
+}
+
+/* TÍTULO */
+.content h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+/* BOX DE BUSCA */
 .producao-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: 12px;
 }
 
-.producao-box input,
-.producao-box select {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #27496D;
-  background: #0D1E2C;
-  color: white;
-}
-
+/* FORMULARIO */
 .producao-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 25px;
+  margin-top: 20px;
+  box-shadow: var(--shadow);
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.producao-form textarea {
+  grid-column: span 2;
+  resize: none;
+  height: 90px;
+}
+
+.btn-add {
+  grid-column: span 2;
+  background: var(--accent);
+  color: white;
+  border-radius: var(--radius);
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* LISTA DE PEÇAS */
+.pecas-titulo {
+  margin-top: 35px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* GRID DAS PEÇAS */
+.pecas-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 20px;
+}
+
+/* CARD INDIVIDUAL */
+.peca-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 20px;
+  position: relative;
 }
 
-.producao-form input,
-.producao-form select,
-.producao-form textarea {
-  background: #0D1E2C;
-  border: 1px solid #27496D;
-  padding: 10px;
+.peca-foto {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.peca-delete {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #dc3545;
+  border: none;
   border-radius: 8px;
+  padding: 5px 8px;
   color: white;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.pecas-lista {
-  margin-top: 16px;
+.peca-info p {
+  margin: 3px 0;
+  color: var(--text-secondary);
+}
+.btn-evidencias {
+  background: var(--accent);
+  color: white;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  border: none;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.btn-evidencias:hover {
+  background: var(--accent-hover);
+}
+
+/* MODAL */
+.modal-evidencia-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
 }
 
-.peca-item {
-  background: rgba(16,32,48,0.85);
-  padding: 12px;
+.modal-evidencia {
+  background: var(--bg-card);
+  padding: 25px;
+  border-radius: var(--radius);
+  width: 420px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+.evidencias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin: 15px 0;
+}
+
+.evidencia-thumb {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.btn-close {
+  width: 100%;
+  background: #dc3545;
+  color: white;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: none;
+  margin-top: 10px;
+  font-weight: 600;
+}
+.evidencia-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.evidencia-thumb {
+  width: 120px;
+  height: 120px;
   border-radius: 10px;
-  border: 1px solid rgba(95,168,211,0.18);
-  display: flex;
-  justify-content: space-between;
+  object-fit: cover;
+  border: 2px solid #d3d7dd;
+}
+
+.btn-excluir-foto {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 4px 7px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.2s;
+}
+
+.btn-excluir-foto:hover {
+  background: #bb2d3b;
 }

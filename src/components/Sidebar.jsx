@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Sidebar.css";
+import "../styles/theme.css";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);

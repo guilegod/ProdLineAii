@@ -1,235 +1,209 @@
-/* ============================================
-   FORMULÁRIO PRO — CADASTRO DE BOBINAS
-   ============================================ */
+/* ============================== */
+/*    THEME: INDUSTRIAL CLEAN     */
+/* ============================== */
 
-.cadastro-page {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+:root {
+  --bg-main: #e9eef5;
+  --bg-card: #ffffff;
+  --bg-sidebar: #ffffff;
+  --border-color: #bfc7d2;
+  --text-primary: #1a1f29;
+  --text-secondary: #5b667a;
+  --accent: #0d6efd;
+  --accent-hover: #0b5ed7;
+
+  --radius: 10px;
+  --shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+
+  --font-main: "Inter", "Roboto", sans-serif;
 }
 
-/* CARD CABEÇALHO */
+body {
+  background: var(--bg-main);
+  font-family: var(--font-main);
+  color: var(--text-primary);
+}
+
+/* ============================== */
+/*         LAYOUT GERAL           */
+/* ============================== */
+
+.page-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.cadastro-page {
+  flex: 1;
+  padding: 40px 60px;
+}
+
+/* ============================== */
+/*           CABEÇALHO            */
+/* ============================== */
+
 .cadastro-header-card {
-  background: rgba(16, 32, 48, 0.95);
-  padding: 26px 30px;
-  border-radius: 18px;
-  border: 1px solid rgba(95, 168, 211, 0.18);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(6px);
+  background: var(--bg-card);
+  padding: 22px 26px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  margin-bottom: 30px;
 }
 
 .cadastro-header-card h1 {
-  color: #7BC6FF;
-  font-size: 2.1rem;
-  margin-bottom: 8px;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--accent);
 }
 
-.cadastro-header-card p {
-  color: #A8C1D9;
-}
+/* ============================== */
+/*             FORM               */
+/* ============================== */
 
-/* CARD FORMULÁRIO */
 .cadastro-form-card {
-  background: rgba(16, 32, 48, 0.95);
-  padding: 26px 30px 24px;
-  border-radius: 18px;
-  border: 1px solid rgba(95, 168, 211, 0.18);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(6px);
+  background: var(--bg-card);
+  padding: 25px 30px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  margin-bottom: 35px;
 }
 
 .cadastro-form-card h2 {
-  color: #7BC6FF;
-  font-size: 1.4rem;
-  margin-bottom: 14px;
+  color: var(--accent);
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 18px;
 }
 
-/* FORM */
 .cadastro-form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 22px;
 }
 
-/* Linha padrão (um campo por linha) */
 .form-row {
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
-/* Linhas com dois / três campos lado a lado (desktop) */
 .form-row-inline {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
 
-/* Label + ícone */
-.form-row label {
-  font-size: 0.95rem;
-  color: #A8C1D9;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.field-icon {
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: rgba(15, 80, 150, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-}
-
-/* Inputs / Select / Textarea */
-.form-row input,
-.form-row select,
-.form-row textarea {
-  background: #0D1E2C;
-  border: 1px solid #27496D;
-  border-radius: 10px;
-  padding: 9px 11px;
-  color: #DCEAF7;
-  font-size: 0.95rem;
-  transition: border-color 0.18s, box-shadow 0.18s, transform 0.08s;
-}
-
-.form-row textarea {
-  min-height: 90px;
-  resize: vertical;
-}
-
-/* Hover */
-.form-row input:hover,
-.form-row select:hover,
-.form-row textarea:hover {
-  border-color: #5FA8D3;
-}
-
-/* Focus */
-.form-row input:focus,
-.form-row select:focus,
-.form-row textarea:focus {
-  outline: none;
-  border-color: #7BC6FF;
-  box-shadow: 0 0 0 1px rgba(123, 198, 255, 0.35);
-  transform: translateY(-0.5px);
-}
-
-/* Hint */
-.hint {
-  font-size: 0.8rem;
-  color: #7f99b4;
-}
-
-/* Campo status (read-only) */
-.form-row input[disabled] {
-  opacity: 0.75;
-  cursor: default;
-}
-
-/* Ações */
-.form-actions {
-  margin-top: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Botão principal */
-.btn-salvar-premium {
-  background: linear-gradient(135deg, #1e90ff, #34c9ff);
-  border: none;
-  padding: 11px 20px;
-  border-radius: 999px;
-  color: white;
-  font-weight: 600;
-  font-size: 0.98rem;
-  cursor: pointer;
-  box-shadow: 0 5px 18px rgba(30, 144, 255, 0.5);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s;
-}
-
-.btn-salvar-premium:hover {
-  transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 7px 22px rgba(30, 144, 255, 0.6);
-  filter: brightness(1.03);
-}
-
-.btn-salvar-premium:active {
-  transform: translateY(0px) scale(0.99);
-  box-shadow: 0 3px 12px rgba(30, 144, 255, 0.4);
-}
-
-.msg-sucesso {
-  font-size: 0.9rem;
-  color: #7BC6FF;
-}
-
-/* QR pós cadastro */
-.qr-pos-cadastro {
-  margin-top: 10px;
-  background: rgba(16, 32, 48, 0.96);
-  padding: 22px 26px;
-  border-radius: 18px;
-  border: 1px solid rgba(95, 168, 211, 0.2);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.55);
-  text-align: center;
-}
-
-.qr-pos-cadastro h3 {
-  color: #7BC6FF;
+label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
   margin-bottom: 6px;
 }
 
-.qr-pos-cadastro p {
-  color: #A8C1D9;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  background: #ffffff;
+  font-size: 15px;
+  color: var(--text-primary);
+  transition: 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
+}
+
+textarea {
+  min-height: 90px;
+}
+
+/* ============================== */
+/*             BUTTONS            */
+/* ============================== */
+
+.btn-salvar-premium {
+  background: var(--accent);
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-salvar-premium:hover {
+  background: var(--accent-hover);
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.msg-sucesso {
+  font-size: 14px;
+  color: #2c7;
+  font-weight: 600;
+}
+
+/* ============================== */
+/*           QR CODE              */
+/* ============================== */
+
+.qr-pos-cadastro {
+  background: var(--bg-card);
+  padding: 24px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  text-align: center;
+  max-width: 340px;
 }
 
 .qr-box-cadastro {
   display: flex;
   justify-content: center;
-  margin-bottom: 12px;
+  margin: 15px 0;
 }
 
-/* Botão imprimir QR */
 .btn-imprimir-qr {
-  background: #1B2F45;
-  border-radius: 999px;
-  border: 1px solid #27496D;
-  padding: 8px 16px;
-  color: #E3ECF5;
+  background: var(--accent);
+  color: white;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  border: none;
   cursor: pointer;
-  font-size: 0.9rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: 0.18s;
+  transition: 0.2s;
 }
 
 .btn-imprimir-qr:hover {
-  background: #27496D;
+  background: var(--accent-hover);
 }
 
-/* RESPONSIVO */
-@media (max-width: 768px) {
-  .cadastro-header-card,
-  .cadastro-form-card,
-  .qr-pos-cadastro {
-    padding: 18px 16px;
-  }
+/* ============================== */
+/*          AJUSTES MOBILE        */
+/* ============================== */
 
-  .cadastro-header-card h1 {
-    font-size: 1.6rem;
+@media (max-width: 900px) {
+  .form-row-inline {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .form-row-inline {
+    grid-template-columns: 1fr;
   }
 }

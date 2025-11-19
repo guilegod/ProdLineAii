@@ -1,175 +1,191 @@
-/* =============================== */
-/* LAYOUT GERAL                    */
-/* =============================== */
+/* ============================== */
+/*    THEME: INDUSTRIAL CLEAN     */
+/* ============================== */
+
+:root {
+  --bg-main: #e2e6ee;              /* Fundo levemente mais escuro */
+  --bg-card: #f9fafc;              /* Card mais escuro que branco puro */
+  --bg-sidebar: #ffffff;
+  --border-color: #b9bec8;         /* Bordas mais fortes */
+  --border-color-strong: #aab0bb;  /* Para cartões e áreas internas */
+  --text-primary: #1a1f29;
+  --text-secondary: #4d5667;
+  --accent: #0d6efd;
+  --accent-hover: #0b5ed7;
+
+  --radius: 10px;
+  --shadow: 0 3px 8px rgba(0, 0, 0, 0.10);
+
+  --font-main: "Inter", "Roboto", sans-serif;
+}
+
+body {
+  background: var(--bg-main);
+  font-family: var(--font-main);
+  color: var(--text-primary);
+}
+
+/* ============================== */
+/*         LAYOUT BASE            */
+/* ============================== */
 
 .detalhes-layout {
   display: flex;
+  width: 100%;
+  min-height: 100vh;
 }
 
 .detalhes-content {
-  width: 100%;
-  margin-left: 240px;
-  padding: 24px;
+  flex: 1;
+  padding: 40px 60px;
 }
 
-@media (max-width: 899px) {
-  .detalhes-content {
-    margin-left: 0;
-    padding: 16px;
-  }
-}
-
-/* =============================== */
-/* PAINEL CABEÇALHO                */
-/* =============================== */
+/* ============================== */
+/*         TÍTULO / HEADER        */
+/* ============================== */
 
 .details-title-panel {
-  background: rgba(16, 32, 48, 0.95);
-  padding: 18px 22px;
-  border-radius: 16px;
-  border: 1px solid rgba(95,168,211,0.18);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-  gap: 12px;
+  margin-bottom: 30px;
 }
 
 .details-title-panel h1 {
-  color: #7bc6ff;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--accent);
   margin: 0;
 }
 
-/* Ações (botões) */
-.details-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+.details-title-panel p {
+  color: var(--text-secondary);
+  margin-top: 4px;
 }
 
-.btn-secundario {
-  background: #1B2F45;
-  border: 1px solid #27496D;
-  padding: 8px 12px;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.btn-secundario:hover {
-  background: #2d5f85;
-}
-
-/* =============================== */
-/* PAINEL SENHA                    */
-/* =============================== */
-
-.senha-panel {
-  background: rgba(16,32,48,0.9);
-  padding: 14px 16px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-  border: 1px solid rgba(95,168,211,0.18);
-}
-
-.senha-panel input {
-  background: #0D1E2C;
-  border: 1px solid #27496D;
-  padding: 8px 10px;
-  border-radius: 8px;
-  color: #DCEAF7;
-}
-
-/* =============================== */
-/* GRID GERAL                      */
-/* =============================== */
-
-.detalhes-duas-colunas {
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-  gap: 20px;
-}
-
-@media (max-width: 900px) {
-  .detalhes-duas-colunas {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* =============================== */
-/* PAINÉIS                         */
-/* =============================== */
+/* ============================== */
+/*             CARDS             */
+/* ============================== */
 
 .details-panel {
-  background: rgba(16, 32, 48, 0.95);
-  padding: 18px 20px;
-  border-radius: 16px;
-  border: 1px solid rgba(95,168,211,0.18);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+  background: var(--bg-card);
+  padding: 22px 26px;
+  border-radius: var(--radius);
+
+  /* 🔥 Borda mais escura */
+  border: 2px solid var(--border-color-strong);
+
+  /* Sombra mais forte para compensar o fundo mais escuro */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  margin-bottom: 28px;
 }
 
 .details-panel h2 {
-  color: #7bc6ff;
-  margin-bottom: 12px;
+  margin-bottom: 18px;
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 600;
 }
 
-/* =============================== */
-/* GRID DOS CAMPOS                 */
-/* =============================== */
+/* ============================== */
+/*             GRID              */
+/* ============================== */
+
+.detalhes-duas-colunas {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 30px;
+}
 
 .details-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px,1fr));
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
 }
 
-.details-grid label {
-  color: #A8C1D9;
-  font-size: 0.85rem;
+/* ============================== */
+/*            CAMPOS             */
+/* ============================== */
+
+label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  display: block;
 }
 
-.details-grid input,
-.details-grid select,
-.details-grid textarea {
+input,
+select,
+textarea {
   width: 100%;
-  background: #0D1E2C;
-  border: 1px solid #27496D;
-  padding: 8px 10px;
-  border-radius: 10px;
-  color: #DCEAF7;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+
+  /* 🔥 Borda mais forte */
+  border: 2px solid var(--border-color);
+
+  background: #ffffff;
+  font-size: 15px;
+  color: var(--text-primary);
+  transition: 0.2s;
 }
 
-/* =============================== */
-/* QR CODE                         */
-/* =============================== */
-
-.qr-box {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.18);
 }
 
-/* =============================== */
-/* FOTOS                           */
-/* =============================== */
+/* ============================== */
+/*            BOTÕES             */
+/* ============================== */
+
+button {
+  cursor: pointer;
+  font-family: var(--font-main);
+}
+
+.btn-secundario,
+.save-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  font-size: 15px;
+  transition: 0.2s;
+
+  /* Deixar mais forte visualmente */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.20);
+}
+
+.btn-secundario:hover,
+.save-btn:hover {
+  background: var(--accent-hover);
+}
+
+/* ============================== */
+/*             FOTOS             */
+/* ============================== */
 
 .photos-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 14px;
 }
 
 .photo-thumb-rect {
-  width: 180px;
+  width: 100%;
   height: 120px;
   object-fit: cover;
-  border-radius: 10px;
-  border: 2px solid #1E90FF;
+  border-radius: var(--radius);
+
+  /* Borda mais escura */
+  border: 2px solid var(--border-color);
 }
 
 .foto-wrapper {
@@ -178,19 +194,34 @@
 
 .foto-remove-btn {
   position: absolute;
-  top: 4px;
-  right: 4px;
-  padding: 4px 7px;
-  background: #ff4d4d;
-  border: none;
+  top: 6px;
+  right: 6px;
+  background: #dc3545;
+  padding: 3px 6px;
+  font-size: 12px;
   border-radius: 6px;
   color: white;
-  cursor: pointer;
+  border: none;
 }
 
-/* =============================== */
-/* ARQUIVOS                        */
-/* =============================== */
+.modal-foto-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-foto-img {
+  max-width: 80vw;
+  max-height: 80vh;
+  border-radius: var(--radius);
+}
+
+/* ============================== */
+/*            LISTAGEM           */
+/* ============================== */
 
 .files-list {
   list-style: none;
@@ -199,134 +230,38 @@
 
 .files-list li {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
+
+  background: #eef1f7;                 /* Pouco mais escuro */
+  border: 2px solid var(--border-color-strong);
+
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  margin-bottom: 8px;
 }
 
-.file-icon {
-  font-size: 1.3rem;
+/* ============================== */
+/*        SENHA / ALERTA         */
+/* ============================== */
+
+.senha-panel {
+  background: var(--bg-card);
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 2px solid var(--border-color-strong);
+  margin-bottom: 30px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
-.sem-arquivos {
-  opacity: .8;
-  margin-top: 4px;
-}
+/* ============================== */
+/*             QR CODE           */
+/* ============================== */
 
-/* =============================== */
-/* MODAL FOTO                      */
-/* =============================== */
-
-.modal-foto-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
+.qr-box {
   display: flex;
   justify-content: center;
-  align-items: center;
-  z-index: 300;
-}
-
-.modal-foto-img {
-  width: 90%;
-  max-width: 550px;
-  border-radius: 16px;
-}
-
-/* =============================== */
-/* MODAL QR                        */
-/* =============================== */
-
-.modal-qr-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 300;
-}
-
-.modal-qr-content {
-  background: white;
-  padding: 20px;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.modal-qr-rastro {
-  margin-top: 12px;
-  font-size: 1.4rem;
-  color: black;
-}
-
-/* =============================== */
-/* BOTÃO SALVAR                    */
-/* =============================== */
-
-.save-btn {
-  margin-top: 12px;
-  background: #1E90FF;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 10px;
-  color: white;
-  cursor: pointer;
-}
-
-/* ========================================= */
-/* MODO DE IMPRESSÃO – DOCUMENTO LIMPO       */
-/* ========================================= */
-@media print {
-
-  /* Remove sidebar, botões, overlays */
-  .sidebar,
-  .hamburger-btn,
-  .details-actions,
-  .senha-panel,
-  .modal-foto-backdrop,
-  .modal-qr-backdrop,
-  .sidebar-overlay {
-    display: none !important;
-  }
-
-  /* Página ocupa toda a folha */
-  body,
-  .detalhes-layout,
-  .detalhes-content {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100%;
-  }
-
-  /* Remove fundos escuros para não gastar tinta */
-  .details-panel,
-  .details-title-panel {
-    background: white !important;
-    box-shadow: none !important;
-    border: 1px solid #ccc !important;
-  }
-
-  /* Esconde fotos e arquivos */
-  .photos-grid,
-  .files-list {
-    display: none !important;
-  }
-
-  /* QR grande */
-  .qr-box canvas {
-    width: 260px !important;
-    height: 260px !important;
-  }
-
-  /* Títulos pretos */
-  h1, h2, h3, p, label {
-    color: black !important;
-  }
-}
-/* melhora a qualidade da captura */
-.detalhes-content {
-  background: #696969;
+  padding: 16px 0;
 }
